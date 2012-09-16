@@ -71,7 +71,7 @@
 			</p>
 			<h3>Download and Repository</h3>
 			<p>
-				The repository and download for Community Auth is currently at Bitbucket: <a href="https://bitbucket.org/skunkbad/community-auth-ci-session-version" rel="external">Click here to go there</a>. The "<a href="https://bitbucket.org/skunkbad/community-auth-ci-session-version/get/tip.zip">tip</a>" of the Community Auth Repository is the version that is pre-installed in CodeIgniter. If you just want the files, find the isolated version on the downloads page.
+				The repository and download for Community Auth is currently at <a href="https://bitbucket.org/skunkbad/community-auth-ci-session-version" rel="external">Bitbucket</a> and mirrored at <a href="https://github.com/skunkbad/Community-Auth">GitHub</a>. The "<a href="https://bitbucket.org/skunkbad/community-auth-ci-session-version/get/tip.zip">tip</a>" of the Community Auth Repository is the version that is pre-installed in CodeIgniter. If you just want the files, find the isolated version on the <a href="https://bitbucket.org/skunkbad/community-auth-ci-session-version/downloads">downloads page</a>.
 			</p>
 			<h3>Quick Start</h3>
 			<p>If you're an experienced user of CodeIgniter, you can get started quite easily.</p>
