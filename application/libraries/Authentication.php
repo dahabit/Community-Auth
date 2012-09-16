@@ -434,16 +434,16 @@ class Authentication
 
 		$login_time_split = str_split( $login_time , 5 );
 
-        return $login_time_split[0] .
-               rand(0,9) .
-               $umod_split[1] .
-               rand(0,9) .
-               $user_id .
-               rand(0,9) .
-               $umod_split[0] .
-               rand(0,9) .
-               rand(0,9) .
-               $login_time_split[1];
+		return $login_time_split[0] .
+			rand(0,9) .
+			$umod_split[1] .
+			rand(0,9) .
+			$user_id .
+			rand(0,9) .
+			$umod_split[0] .
+			rand(0,9) .
+			rand(0,9) .
+			$login_time_split[1];
 	}
 
 	// --------------------------------------------------------------
