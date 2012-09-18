@@ -29,7 +29,7 @@
 		?>
 
 			<p>
-				Community Auth is a user authentication application for <a href="http://codeigniter.com" rel="external">CodeIgniter</a>. If you've come here looking for an authentication library, then please keep in mind that Community Auth is more than just a library. Community Auth comes with example controllers, models, views, and is distributed as a styled website. All of these things are available 2 ways:
+				Community Auth is a user authentication application for <a href="http://codeigniter.com" rel="external">CodeIgniter</a>. It is completely unique, and not based on anyone's previous work. If you've come here looking for a CodeIgniter authentication library, then please keep in mind that Community Auth is more than just a library. Community Auth is distributed with example controllers, models, views, and should be considered a project foundation. All of this is available 2 ways:
 			</p>
 			<ol class="std-list">
 				<li>A version pre-installed in a CodeIgniter <?php echo CI_VERSION; ?> installation.</li>
