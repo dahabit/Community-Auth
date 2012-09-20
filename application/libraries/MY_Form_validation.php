@@ -47,6 +47,19 @@ class MY_Form_validation extends CI_Form_validation {
 	// --------------------------------------------------------------
 
 	/**
+	 * If there are form validation errors, you can unset them so they
+	 * don't display when calling validation_errors().
+	 *
+	 * @param  string  the field name to unset
+	 */
+	public function unset_error( $field )
+	{
+		if( isset( $this->_error_array[$field] ) ) unset( $this->_error_array[$field] );
+	}
+
+	// --------------------------------------------------------------
+
+	/**
 	 * Access to protected $_field_data array
 	 */
 	public function get_field_data()

@@ -25,6 +25,18 @@ class MY_Model extends CI_Model {
 	public $error_delimiters = array( '<li>', '</li>' );
 
 	/**
+	 * An array specifying which fields to unset from 
+	 * the form validation class' protected error array.
+	 * This is helpful if you have hidden fields that 
+	 * are required, but the user shouldn't see them 
+	 * if form validation fails.
+	 *
+	 * @var string
+	 * @access public
+	 */
+	public $hide_errors = array();
+
+	/**
 	 * All form validation errors are stored as a string, 
 	 * and can be accessed from the controller or model.
 	 *
@@ -80,7 +92,16 @@ class MY_Model extends CI_Model {
 		/**
 		 * If form validation passes, none of the code below will be processed.
 		 */
-		
+
+		// Unset fields from the error array if they are in the hide errors array.
+		if( ! empty( $this->hide_errors ) )
+		{
+			foreach( $this->hide_errors as $field )
+			{
+				$this->form_validation->unset_error( $field );
+			}
+		}
+
 		// Load errors into class member for use in model or controller.
 		$this->validation_errors = validation_errors();
 
