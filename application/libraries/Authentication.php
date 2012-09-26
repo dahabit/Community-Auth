@@ -250,12 +250,12 @@ class Authentication
 							$this->CI->session->sess_expire_on_close = FALSE;
 							$this->CI->session->sess_expiration = config_item('remember_me_expiration');
 
-							// Set the expiration of the userName cookie
+							// Set the expiration of the http user cookie
 							$http_user_cookie['expire'] = config_item('remember_me_expiration') + time();
 						}
 						else
 						{
-							// Unless remember me is requested, the userName cookie expires when the browser closes.
+							// Unless remember me is requested, the http user cookie expires when the browser closes.
 							$http_user_cookie['expire'] = 0;
 						}
 
