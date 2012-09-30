@@ -25,17 +25,17 @@ $config['install_rules'] = array(
 	array(
 		'field' => 'user_name',
 		'label' => 'ADMIN USERNAME',
-		'rules' => 'trim|alpha_numeric|max_length['. MAX_CHARS_4_USERNAME .']|min_length['. MIN_CHARS_4_USERNAME .']|external_callbacks[formval_callbacks,_username_check]'
+		'rules' => 'trim|alpha_numeric|max_length['. MAX_CHARS_4_USERNAME .']|min_length['. MIN_CHARS_4_USERNAME .']|external_callbacks[model,formval_callbacks,_username_check]'
 	),
 	array(
 		'field' => 'user_pass',
 		'label' => 'ADMIN PASSWORD',
-		'rules' => 'trim|external_callbacks[formval_callbacks,_check_password_strength,TRUE]'
+		'rules' => 'trim|external_callbacks[model,formval_callbacks,_check_password_strength,TRUE]'
 	),
 	array(
 		'field' => 'user_email',
 		'label' => 'ADMIN EMAIL ADDRESS',
-		'rules' => 'trim|max_length[255]|valid_email|external_callbacks[formval_callbacks,_email_exists_check]'
+		'rules' => 'trim|max_length[255]|valid_email|external_callbacks[model,formval_callbacks,_email_exists_check]'
 	),
 	array(
 		'field' => 'last_name',
@@ -60,7 +60,7 @@ $config['install_rules'] = array(
 	array(
 		'field' => 'test_users_pass',
 		'label' => 'TEST USERS PASSWORD',
-		'rules' => 'trim|external_callbacks[formval_callbacks,_check_password_strength,TRUE]'
+		'rules' => 'trim|external_callbacks[model,formval_callbacks,_check_password_strength,TRUE]'
 	)
 );
 

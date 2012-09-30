@@ -16,12 +16,12 @@ $config['self_update'] = array(
 	array(
 		'field' => 'user_email',
 		'label' => 'EMAIL ADDRESS',
-		'rules' => 'trim|required|max_length[255]|valid_email|external_callbacks[formval_callbacks,_update_email,self_update]'
+		'rules' => 'trim|required|max_length[255]|valid_email|external_callbacks[model,formval_callbacks,_update_email,self_update]'
 	),
 	array(
 		'field' => 'user_pass',
 		'label' => 'PASSWORD',
-		'rules' => 'trim|matches[user_pass_confirm]|external_callbacks[formval_callbacks,_check_password_strength,FALSE]'
+		'rules' => 'trim|matches[user_pass_confirm]|external_callbacks[model,formval_callbacks,_check_password_strength,FALSE]'
 	),
 	array(
 		'field' => 'user_pass_confirm',
@@ -50,17 +50,17 @@ $config['update_user'] = array(
 	array(
 		'field' => 'user_level',
 		'label' => 'USER LEVEL',
-		'rules' => 'trim|required|integer|external_callbacks[formval_callbacks,_stop_level_up]'
+		'rules' => 'trim|required|integer|external_callbacks[model,formval_callbacks,_stop_level_up]'
 	),
 	array(
 		'field' => 'user_email',
 		'label' => 'EMAIL ADDRESS',
-		'rules' => 'trim|required|max_length[255]|valid_email|external_callbacks[formval_callbacks,_update_email,update_user]'
+		'rules' => 'trim|required|max_length[255]|valid_email|external_callbacks[model,formval_callbacks,_update_email,update_user]'
 	),
 	array(
 		'field' => 'user_pass',
 		'label' => 'PASSWORD',
-		'rules' => 'trim|matches[user_pass_confirm]|external_callbacks[formval_callbacks,_check_password_strength,FALSE]'
+		'rules' => 'trim|matches[user_pass_confirm]|external_callbacks[model,formval_callbacks,_check_password_strength,FALSE]'
 	),
 	array(
 		'field' => 'user_pass_confirm',

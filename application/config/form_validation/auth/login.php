@@ -21,7 +21,7 @@ $config['login_rules'] = array(
 	array(
 		'field' => 'login_pass',
 		'label' => 'PASSWORD',
-		'rules' => 'trim|required|external_callbacks[formval_callbacks,_check_password_strength,TRUE]'
+		'rules' => 'trim|required|external_callbacks[model,formval_callbacks,_check_password_strength,TRUE]'
 	)
 );
 

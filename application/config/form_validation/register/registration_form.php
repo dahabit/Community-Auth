@@ -15,17 +15,17 @@ $config['registration_form'] = array(
 	array(
 		'field' => 'user_name',
 		'label' => 'USERNAME',
-		'rules' => 'trim|required|alpha_numeric|max_length['. MAX_CHARS_4_USERNAME .']|min_length['. MIN_CHARS_4_USERNAME .']|callback__username_check_model[formval_callbacks]'
+		'rules' => 'trim|required|alpha_numeric|max_length['. MAX_CHARS_4_USERNAME .']|min_length['. MIN_CHARS_4_USERNAME .']|external_callbacks[model,formval_callbacks,_username_check]'
 	),
 	array(
 		'field' => 'user_pass',
 		'label' => 'PASSWORD',
-		'rules' => 'trim|required|external_callbacks[formval_callbacks,_check_password_strength,TRUE]'
+		'rules' => 'trim|required|external_callbacks[model,formval_callbacks,_check_password_strength,TRUE]'
 	),
 	array(
 		'field' => 'user_email',
 		'label' => 'EMAIL ADDRESS',
-		'rules' => 'trim|required|max_length[255]|valid_email|external_callbacks[formval_callbacks,_email_exists_check]'
+		'rules' => 'trim|required|max_length[255]|valid_email|external_callbacks[model,formval_callbacks,_email_exists_check]'
 	),
 	array(
 		'field' => 'last_name',

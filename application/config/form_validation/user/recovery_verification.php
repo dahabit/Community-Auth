@@ -15,7 +15,7 @@ $config['recovery_verification'] = array(
 	array(
 		'field' => 'user_pass',
 		'label' => 'NEW PASSWORD',
-		'rules' => 'trim|required|matches[user_pass_confirm]|external_callbacks[formval_callbacks,_check_password_strength,TRUE]'
+		'rules' => 'trim|required|matches[user_pass_confirm]|external_callbacks[model,formval_callbacks,_check_password_strength,TRUE]'
 	),
 	array(
 		'field' => 'user_pass_confirm',
