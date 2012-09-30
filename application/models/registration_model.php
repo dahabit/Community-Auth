@@ -82,14 +82,14 @@ class Registration_model extends MY_Model {
 				'last_name'      => set_value('last_name'),
 				'license_number' => $this->encrypt->encode( set_value('license_number') )
 			);
-		}
 
-		// Insert record
-		$this->db->insert( $this->config->item('temp_reg_data_table'), $insert_array );
+			// Insert record
+			$this->db->insert( $this->config->item('temp_reg_data_table'), $insert_array );
 
-		if( $this->db->affected_rows() > 0 )
-		{
-			return $registration_id;
+			if( $this->db->affected_rows() > 0 )
+			{
+				return $registration_id;
+			}
 		}
 
 		return FALSE;
