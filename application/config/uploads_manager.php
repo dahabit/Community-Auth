@@ -37,7 +37,7 @@ $config['lost_dir'] = './lost_directory/';
 $config['profile_image_destination'] = 'filesystem';
 
 // Profile Image Authentication (for ajax only)
-$config['authentication_profile_image'] = 'Admin,Manager,Customer';
+$config['authentication_profile_image'] = 'admin,manager,customer';
 
 // Upload config for user's profile image
 $config['upload_configuration_profile_image'] = array(
@@ -64,7 +64,7 @@ $config['upload_configuration_profile_image'] = array(
 $config['custom_uploader_destination'] = 'filesystem';
 
 // Profile Image Authentication
-$config['authentication_custom_uploader'] = 'Admin,Manager,Customer';
+$config['authentication_custom_uploader'] = 'admin,manager,customer';
 
 // Upload config for user's profile image
 $config['upload_configuration_custom_uploader'] = array(

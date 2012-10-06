@@ -53,12 +53,12 @@ class Init extends MY_Controller {
 		$this->load->model('user_model');
 		$this->load->library('csrf');
 
-		// Get the Admin user level number from the authentication config
-		$account_types = config_item('account_types');
+		// Get the admin user level number from the authentication config
+		$account_types = $this->authentication->account_types;
 
 		while( $role = current( $account_types ) )
 		{
-			if( $role == 'Admin' )
+			if( $role == 'admin' )
 			{
 				$this->admin_user_level = key( $account_types );
 
@@ -78,7 +78,7 @@ class Init extends MY_Controller {
 	// --------------------------------------------------------------
 
 	/**
-	 * Population of database tables, creation of Admin, and creation of test users.
+	 * Population of database tables, creation of admin, and creation of test users.
 	 */
 	public function index()
 	{
@@ -177,7 +177,7 @@ class Init extends MY_Controller {
 			{
 				$view_data['tables_installed'] = TRUE;
 
-				// Check if Admin created
+				// Check if admin created
 				$query = $this->db->get_where( 
 					config_item( 'user_table' ), 
 					array( 'user_level' => $this->admin_user_level ) 
@@ -185,7 +185,7 @@ class Init extends MY_Controller {
 
 				$view_data['admin_created'] = ( $query->num_rows() > 0 ) ? TRUE : FALSE;
 
-				// Check how many non-Admin users exist
+				// Check how many non-admin users exist
 				$this->db->where( 'user_level !=', $this->admin_user_level );
 
 				$view_data['basic_user_count'] = $this->db->count_all_results( config_item( 'user_table' ) );
@@ -272,7 +272,7 @@ class Init extends MY_Controller {
 		// Set the admin user level
 		$_POST['user_level'] = $this->admin_user_level;
 
-		$this->user_model->create_user( array(), 'self_created' );
+		$this->user_model->create_user( 'admin', array() );
 	}
 
 	// --------------------------------------------------------------
@@ -334,20 +334,41 @@ class Init extends MY_Controller {
 						'user_modified' => time()
 					);
 
-					// Setup profile record
-					$profile_data[] = array(
-						'user_id'        => $test_user_id,
-						'first_name'     => $user[2],
-						'last_name'      => $user[3],
-						'license_number' => $this->encrypt->encode( $user[4] )
-					);
+					// Setup profile records
+					if( $test_user_id < 93062224 )
+					{
+						$manager_data[] = array(
+							'user_id'        => $test_user_id,
+							'first_name'     => $user[2],
+							'last_name'      => $user[3],
+							'license_number' => $this->encrypt->encode( $user[4] ),
+							'phone_number'   => $user[5]
+						);
+					}
+					else
+					{
+						$customer_data[] = array(
+							'user_id'        => $test_user_id,
+							'first_name'     => $user[2],
+							'last_name'      => $user[3],
+							'street_address' => $user[4],
+							'city'           => $user[5],
+							'state'          => $user[6],
+							'zip'            => $user[7],
+						);
+					}
 
 					$test_user_id++;
 				}
 
-				// Insert the records
+				// Insert the user records
 				$this->db->insert_batch( config_item('user_table'), $user_data );
-				$this->db->insert_batch( config_item('profiles_table'), $profile_data );
+
+				// Insert the managers
+				$this->db->insert_batch( config_item('manager_profiles_table'), $manager_data );
+
+				// Insert the customers
+				$this->db->insert_batch( config_item('customer_profiles_table'), $customer_data );
 			}
 			else
 			{
@@ -373,50 +394,50 @@ class Init extends MY_Controller {
 	private function _get_test_users_data()
 	{
 		return array(
-			array('gwashing','gwashington@gmail.com','George','Washington','17891797'),
-			array('jadams02','johnadams@hotmail.com','John','Adams','17971801'),
-			array('tjeffers','thomasjefferson@msn.com','Thomas','Jefferson','18011809'),
-			array('jmadison','jamesmadison@earthlink.net','James','Madison','18091817'),
-			array('jmonroe5','jamesmonroe@yahoo.com','James','Monroe','18171825'),
-			array('jqadams6','johnqadams@gmail.com','John','Adams','18251829'),
-			array('ajackson','andrewjackson@yahoo.com','Andrew','Jackson','18291837'),
-			array('mvburen8','martinvanburen@msn.com','Martin','Van Buren','18371841'),
-			array('wharriso','williamharrison@yahoo.com','William','Harrison','18411841'),
-			array('jtyler10','johntyler@hotmail.com','John','Tyler','18411845'),
-			array('jkpolk11','jameskpolk@gmail.com','James','Polk','18451849'),
-			array('ztaylor2','zacharytaylor@yahoo.com','Zachary','Taylor','18491850'),
-			array('mfillmor','millardfillmore@gmail.com','Millard','Fillmore','18501853'),
-			array('fpierce4','franklinpierce@yahoo.com','Franklin','Pierce','18531857'),
-			array('jbuchana','jamesbuchanan@hotmail.com','James','Buchanan','18571861'),
-			array('alincoln','abrahamlincoln@gmail.com','Abraham','Lincoln','18611865'),
-			array('ajohnson','andrewjohnson@gmail.com','Andrew','Johnson','18651869'),
-			array('ugrant18','ulyssesgrant@hotmail.com','Ulysses','Grant','18691877'),
-			array('rhayes19','rutherfordbhayes@msn.com','Rutherford','Hayes','18771881'),
-			array('jgarfiel','jamesgarfield@yahoo.com','James','Garfield','18811881'),
-			array('caarthur','chesterarthur@msn.com','Chester','Arthur','18811885'),
-			array('gclevela','grovercleveland@yahoo.com','Grover','Cleveland','18851889'),
-			array('bharriso','benjaminharrison@gmail.com','Benjamin','Harrison','18891893'),
-			array('gclevel2','grovercleveland@msn.com','Grover','Cleveland','18931897'),
-			array('wmckinle','williammckinley@gmail.com','William','McKinley','18971901'),
-			array('trooseve','theodoreroosevelt@msn.com','Theodore','Roosevelt','19011909'),
-			array('whtaft27','williamhtaft@mac.com','William','Taft','19091913'),
-			array('wwilson8','woodrowwilson@yahoo.com','Woodrow','Wilson','19131921'),
-			array('wharding','warrenharding@gmail.com','Warren','Harding','19211923'),
-			array('ccoolidg','calvincoolidge@hotmail.com','Calvin','Coolidge','19231929'),
-			array('hhoover3','herberthoover@gmail.com','Herbert','Hoover','19291933'),
-			array('frooseve','franklindroosevelt@yahoo.com','Franklin','Roosevelt','19331945'),
-			array('htruman7','harrytruman@msn.com','Harry','Truman','19451953'),
-			array('deisenho','dwighteisenhower@mac.com','Dwight','Eisenhower','19531961'),
-			array('jkennedy','johnfkennedy@mac.com','John','Kennedy','19611963'),
-			array('ljohnson','lyndonbjohnson@hotmail.com','Lyndon','Johnson','19631969'),
-			array('rnixon98','richardnixon@hotmail.com','Richard','Nixon','19691974'),
-			array('gford383','geraldford@mac.com','Gerald','Ford','19741977'),
-			array('jcarter8','jimmycarter@aol.com','Jimmy','Carter','19771981'),
-			array('rreagan7','ronaldreagan@gmail.com','Ronald','Reagan','19811989'),
-			array('ghwbush1','georgehwbush@gmail.com','George','Bush','19891993'),
-			array('bclinton','billclinton@yahoo.com','Bill','Clinton','19932001'),
-			array('gwbush20','georgebush@gmail.com','George','Bush','20012009'),
-			array('bobama66','theclown@whitehouse.gov','Barack','Obama','20092012')
+			array('gwashing','gwashington@gmail.com','George','Washington','17891797','555-555-5555'),
+			array('jadams02','johnadams@hotmail.com','John','Adams','17971801','555-555-5555'),
+			array('tjeffers','thomasjefferson@msn.com','Thomas','Jefferson','18011809','555-555-5555'),
+			array('jmadison','jamesmadison@earthlink.net','James','Madison','18091817','555-555-5555'),
+			array('jmonroe5','jamesmonroe@yahoo.com','James','Monroe','','','',''),
+			array('jqadams6','johnqadams@gmail.com','John','Adams','','','',''),
+			array('ajackson','andrewjackson@yahoo.com','Andrew','Jackson','','','',''),
+			array('mvburen8','martinvanburen@msn.com','Martin','Van Buren','','','',''),
+			array('wharriso','williamharrison@yahoo.com','William','Harrison','','','',''),
+			array('jtyler10','johntyler@hotmail.com','John','Tyler','','','',''),
+			array('jkpolk11','jameskpolk@gmail.com','James','Polk','','','',''),
+			array('ztaylor2','zacharytaylor@yahoo.com','Zachary','Taylor','','','',''),
+			array('mfillmor','millardfillmore@gmail.com','Millard','Fillmore','','','',''),
+			array('fpierce4','franklinpierce@yahoo.com','Franklin','Pierce','','','',''),
+			array('jbuchana','jamesbuchanan@hotmail.com','James','Buchanan','','','',''),
+			array('alincoln','abrahamlincoln@gmail.com','Abraham','Lincoln','','','',''),
+			array('ajohnson','andrewjohnson@gmail.com','Andrew','Johnson','','','',''),
+			array('ugrant18','ulyssesgrant@hotmail.com','Ulysses','Grant','','','',''),
+			array('rhayes19','rutherfordbhayes@msn.com','Rutherford','Hayes','','','',''),
+			array('jgarfiel','jamesgarfield@yahoo.com','James','Garfield','','','',''),
+			array('caarthur','chesterarthur@msn.com','Chester','Arthur','','','',''),
+			array('gclevela','grovercleveland@yahoo.com','Grover','Cleveland','','','',''),
+			array('bharriso','benjaminharrison@gmail.com','Benjamin','Harrison','','','',''),
+			array('gclevel2','grovercleveland@msn.com','Grover','Cleveland','','','',''),
+			array('wmckinle','williammckinley@gmail.com','William','McKinley','','','',''),
+			array('trooseve','theodoreroosevelt@msn.com','Theodore','Roosevelt','','','',''),
+			array('whtaft27','williamhtaft@mac.com','William','Taft','','','',''),
+			array('wwilson8','woodrowwilson@yahoo.com','Woodrow','Wilson','','','',''),
+			array('wharding','warrenharding@gmail.com','Warren','Harding','','','',''),
+			array('ccoolidg','calvincoolidge@hotmail.com','Calvin','Coolidge','','','',''),
+			array('hhoover3','herberthoover@gmail.com','Herbert','Hoover','','','',''),
+			array('frooseve','franklindroosevelt@yahoo.com','Franklin','Roosevelt','','','',''),
+			array('htruman7','harrytruman@msn.com','Harry','Truman','','','',''),
+			array('deisenho','dwighteisenhower@mac.com','Dwight','Eisenhower','','','',''),
+			array('jkennedy','johnfkennedy@mac.com','John','Kennedy','','','',''),
+			array('ljohnson','lyndonbjohnson@hotmail.com','Lyndon','Johnson','','','',''),
+			array('rnixon98','richardnixon@hotmail.com','Richard','Nixon','','','',''),
+			array('gford383','geraldford@mac.com','Gerald','Ford','','','',''),
+			array('jcarter8','jimmycarter@aol.com','Jimmy','Carter','','','',''),
+			array('rreagan7','ronaldreagan@gmail.com','Ronald','Reagan','','','',''),
+			array('ghwbush1','georgehwbush@gmail.com','George','Bush','','','',''),
+			array('bclinton','billclinton@yahoo.com','Bill','Clinton','','','',''),
+			array('gwbush20','georgebush@gmail.com','George','Bush','','','',''),
+			array('bobama66','theclown@whitehouse.gov','Barack','Obama','','','',''),
 		);
 	}
 

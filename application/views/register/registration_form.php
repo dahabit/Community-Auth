@@ -95,6 +95,8 @@ else
 						// USERNAME LABEL AND INPUT ***********************************************
 						echo form_label('Username','user_name',array('class'=>'form_label'));
 
+						echo input_requirement('*');
+						
 						$input_data = array(
 							'name'		=> 'user_name',
 							'id'		=> 'user_name',
@@ -113,6 +115,8 @@ else
 					<?php
 						// PASSWORD LABEL AND INPUT ***********************************************
 						echo form_label('Password','user_pass',array('class'=>'form_label'));
+
+						echo input_requirement('*');
 
 						$input_data = array(
 							'name'		=> 'user_pass',
@@ -146,6 +150,8 @@ else
 						// EMAIL ADDRESS LABEL AND INPUT ******************************************
 						echo form_label('Email Address','user_email',array('class'=>'form_label'));
 
+						echo input_requirement('*');
+
 						$input_data = array(
 							'name'		=> 'user_email',
 							'id'		=> 'user_email',
@@ -163,6 +169,8 @@ else
 					<?php
 						// FIRST NAME LABEL AND INPUT ***********************************
 						echo form_label('First Name','first_name',array('class'=>'form_label'));
+
+						echo input_requirement('*');
 
 						$input_data = array(
 							'name'		=> 'first_name',
@@ -183,6 +191,8 @@ else
 						// LAST NAME LABEL AND INPUT ***********************************
 						echo form_label('Last Name','last_name',array('class'=>'form_label'));
 
+						echo input_requirement('*');
+
 						$input_data = array(
 							'name'		=> 'last_name',
 							'id'		=> 'last_name',
@@ -199,15 +209,80 @@ else
 				<div class="form-row">
 
 					<?php
-						// LICENSE NUMBER LABEL AND INPUT ***********************************
-						echo form_label('License Number','license_number',array('class'=>'form_label'));
+						// STREET ADDRESS LABEL AND INPUT ***********************************
+						echo form_label('Street Address','street_address',array('class'=>'form_label'));
+
+						echo input_requirement('*');
 
 						$input_data = array(
-							'name'		=> 'license_number',
-							'id'		=> 'license_number',
-							'class'		=> 'form_input alpha_numeric',
-							'value'		=> set_value('license_number'),
-							'maxlength'	=> '8',
+							'name'		=> 'street_address',
+							'id'		=> 'street_address',
+							'class'		=> 'form_input max_chars',
+							'value'		=> set_value('street_address'),
+							'maxlength'	=> '60',
+						);
+
+						echo form_input($input_data);
+
+					?>
+
+				</div>
+				<div class="form-row">
+
+					<?php
+						// CITY LABEL AND INPUT ***********************************
+						echo form_label('City','city',array('class'=>'form_label'));
+
+						echo input_requirement('*');
+
+						$input_data = array(
+							'name'		=> 'city',
+							'id'		=> 'city',
+							'class'		=> 'form_input max_chars',
+							'value'		=> set_value('city'),
+							'maxlength'	=> '60',
+						);
+
+						echo form_input($input_data);
+
+					?>
+
+				</div>
+				<div class="form-row">
+
+					<?php
+						// STATE LABEL AND INPUT ***********************************
+						echo form_label('State','state',array('class'=>'form_label'));
+
+						echo input_requirement('*');
+
+						$input_data = array(
+							'name'		=> 'state',
+							'id'		=> 'state',
+							'class'		=> 'form_input max_chars',
+							'value'		=> set_value('state'),
+							'maxlength'	=> '50',
+						);
+
+						echo form_input($input_data);
+
+					?>
+
+				</div>
+				<div class="form-row">
+
+					<?php
+						// ZIP LABEL AND INPUT ***********************************
+						echo form_label('Zip','zip',array('class'=>'form_label'));
+
+						echo input_requirement('*');
+
+						$input_data = array(
+							'name'		=> 'zip',
+							'id'		=> 'zip',
+							'class'		=> 'form_input max_chars',
+							'value'		=> set_value('zip'),
+							'maxlength'	=> '10',
 						);
 
 						echo form_input($input_data);

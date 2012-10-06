@@ -20,7 +20,7 @@ class Registration_model extends MY_Model {
 	 */
 	public function get_reg_mode()
 	{
-		$query = $this->db->get( $this->config->item('registration_table') );
+		$query = $this->db->get( config_item('registration_table') );
 
 		$row = $query->row();
 
@@ -37,7 +37,7 @@ class Registration_model extends MY_Model {
 	 */
 	public function set_reg_mode( $num )
 	{
-		if( $this->db->update( $this->config->item('registration_table'), array( 'reg_mode' => $num ) ) !== FALSE )
+		if( $this->db->update( config_item('registration_table'), array( 'reg_mode' => $num ) ) !== FALSE )
 		{
 			return TRUE;
 		}
@@ -80,11 +80,14 @@ class Registration_model extends MY_Model {
 				'user_email'     => set_value('user_email'),
 				'first_name'     => set_value('first_name'),
 				'last_name'      => set_value('last_name'),
-				'license_number' => $this->encrypt->encode( set_value('license_number') )
+				'street_address' => set_value('street_address'),
+				'city'           => set_value('city'),
+				'state'          => set_value('state'),
+				'zip'            => set_value('zip')
 			);
 
 			// Insert record
-			$this->db->insert( $this->config->item('temp_reg_data_table'), $insert_array );
+			$this->db->insert( config_item('temp_reg_data_table'), $insert_array );
 
 			if( $this->db->affected_rows() > 0 )
 			{
@@ -104,7 +107,7 @@ class Registration_model extends MY_Model {
 	 */
 	public function view_pending()
 	{
-		$query = $this->db->get( $this->config->item('temp_reg_data_table') );
+		$query = $this->db->get( config_item('temp_reg_data_table') );
 
 		if( $query->num_rows() >= 1 )
 		{
@@ -123,7 +126,7 @@ class Registration_model extends MY_Model {
 	{
 		foreach( $ids as $id )
 		{
-			$this->db->delete( $this->config->item('temp_reg_data_table'), array( 'reg_id' => $id ) );
+			$this->db->delete( config_item('temp_reg_data_table'), array( 'reg_id' => $id ) );
 		}
 	}
 
@@ -144,10 +147,10 @@ class Registration_model extends MY_Model {
 			if( $email_address = $this->_prepare_registration_transfer( $id ) )
 			{
 				// Create user with pre-validated data
-				if( $this->user_model->create_user( $this->insert_array ) === TRUE )
+				if( $this->user_model->create_user( 'customer', $this->insert_array ) === TRUE )
 				{
 					// Delete the temp registration file
-					$this->db->delete( $this->config->item('temp_reg_data_table'), array( 'reg_id' => $id ) );
+					$this->db->delete( config_item('temp_reg_data_table'), array( 'reg_id' => $id ) );
 
 					// Add email address to array for email confirmation
 					$email_addresses[] = $email_address;
@@ -178,10 +181,10 @@ class Registration_model extends MY_Model {
 			$this->load->model('user_model');
 
 			// Create user with pre-validated data
-			if( $this->user_model->create_user( $this->insert_array ) === TRUE )
+			if( $this->user_model->create_user( 'customer', $this->insert_array ) === TRUE )
 			{
 				// Delete the temp registration file
-				$this->db->delete( $this->config->item('temp_reg_data_table'), array( 'reg_id' => $id ) );
+				$this->db->delete( config_item('temp_reg_data_table'), array( 'reg_id' => $id ) );
 
 				return TRUE;
 			}
@@ -202,7 +205,7 @@ class Registration_model extends MY_Model {
 	private function _prepare_registration_transfer( $id )
 	{
 		// Get the temp registration data
-		$query = $this->db->get_where( $this->config->item('temp_reg_data_table'), array( 'reg_id' => $id ) );
+		$query = $this->db->get_where( config_item('temp_reg_data_table'), array( 'reg_id' => $id ) );
 
 		if( $query->num_rows() == 1 )
 		{
@@ -225,10 +228,12 @@ class Registration_model extends MY_Model {
 				'user_name'      => $result->user_name,
 				'user_email'     => $result->user_email,
 				'user_pass'      => $real_password,
-				'user_level'     => 1,
 				'first_name'     => $result->first_name,
 				'last_name'      => $result->last_name,
-				'license_number' => $this->encrypt->decode( $result->license_number )
+				'street_address' => $result->street_address,
+				'city'           => $result->city,
+				'state'          => $result->state,
+				'zip'            => $result->zip,
 			);
 
 			return $result->user_email;

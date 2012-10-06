@@ -88,7 +88,10 @@ CREATE TABLE IF NOT EXISTS `<?php echo config_item('temp_reg_data_table'); ?>` (
   `user_email` varchar(255) NOT NULL,
   `first_name` varchar(20) NOT NULL,
   `last_name` varchar(20) NOT NULL,
-  `license_number` varchar(30) NOT NULL
+  `street_address` varchar(60) NOT NULL,
+  `city` varchar(60) NOT NULL,
+  `state` varchar(50) NOT NULL,
+  `zip` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -131,14 +134,47 @@ CREATE TABLE IF NOT EXISTS `<?php echo config_item('user_table'); ?>` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_profiles`
+-- Table structure for table `customer_profiles`
 --
 
-CREATE TABLE IF NOT EXISTS `<?php echo config_item('profiles_table'); ?>` (
+CREATE TABLE IF NOT EXISTS `<?php echo config_item('customer_profiles_table'); ?>` (
+  `user_id` int(10) unsigned NOT NULL,
+  `first_name` varchar(20) NOT NULL,
+  `last_name` varchar(20) NOT NULL,
+  `street_address` varchar(60) NOT NULL,
+  `city` varchar(60) NOT NULL,
+  `state` varchar(50) NOT NULL,
+  `zip` varchar(10) NOT NULL,
+  `profile_image` text,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `manager_profiles`
+--
+
+CREATE TABLE IF NOT EXISTS `<?php echo config_item('manager_profiles_table'); ?>` (
   `user_id` int(10) unsigned NOT NULL,
   `first_name` varchar(20) NOT NULL,
   `last_name` varchar(20) NOT NULL,
   `license_number` varchar(30) NOT NULL,
+  `phone_number` varchar(20) NOT NULL,
+  `profile_image` text,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin_profiles`
+--
+
+CREATE TABLE IF NOT EXISTS `<?php echo config_item('admin_profiles_table'); ?>` (
+  `user_id` int(10) unsigned NOT NULL,
+  `first_name` varchar(20) NOT NULL,
+  `last_name` varchar(20) NOT NULL,
   `profile_image` text,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

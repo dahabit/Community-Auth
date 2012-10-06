@@ -1,6 +1,6 @@
 <?php if( ! defined('BASEPATH') ) exit('No direct script access allowed');
 /**
- * Community Auth - Form Validation Rules for User Creation
+ * Community Auth - Form Validation Rules for Manager Creation
  *
  * Community Auth is an open source authentication application for CodeIgniter 2.1.2
  *
@@ -11,7 +11,7 @@
  * @link        http://community-auth.com
  */
 
-$rules = array(
+$config['manager_creation_rules'] = array(
 	array(
 		'field' => 'user_name',
 		'label' => 'USERNAME',
@@ -41,26 +41,13 @@ $rules = array(
 		'field' => 'license_number',
 		'label' => 'LICENSE NUMBER',
 		'rules' => 'trim|required|alpha_numeric|max_length[8]'
+	),
+	array(
+		'field' => 'phone_number',
+		'label' => 'PHONE NUMBER',
+		'rules' => 'trim|required|xss_clean|max_length[20]'
 	)
 );
 
-// Self-created users cannot pass the check done in the _stop_level_up callback
-$config['self_created_user_creation_rules'] = array_merge( $rules, array(
-	array(
-		'field' => 'user_level',
-		'label' => 'USER LEVEL',
-		'rules' => 'trim|required|integer'
-	),
-));
-
-// Standard user creation enforces the check done in the _stop_level_up callback
-$config['standard_user_creation_rules'] = array_merge( $rules, array(
-	array(
-		'field' => 'user_level',
-		'label' => 'USER LEVEL',
-		'rules' => 'trim|required|integer|external_callbacks[model,formval_callbacks,_stop_level_up]'
-	),
-));
-
-/* End of file create_user.php */
-/* Location: /application/config/form_validation/administration/create_user.php */
+/* End of file create_manager.php */
+/* Location: /application/config/form_validation/administration/create_user/create_manager.php */

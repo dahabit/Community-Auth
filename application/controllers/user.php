@@ -288,20 +288,29 @@ class User extends MY_Controller {
 			if( $this->csrf->token_match )
 			{
 				// Update the user
-				$this->user_model->update_user( $this->auth_user_id, 'self_update' );
+				$this->user_model->update_user( $this->auth_role, $this->auth_user_id, 'self_update' );
 			}
 
 			// Get the user record
 			$user_row = $this->user_model->view_user_record( $this->auth_user_id );
 
+			// Determine the role
+			$role = $this->authentication->account_types[$user_row->user_level];
+
 			// Decrypt any sensitive data for display
-			$user_row->license_number = $this->encrypt->decode( $user_row->license_number );
+			if( isset( $user_row->license_number ) )
+			{
+				$user_row->license_number = $this->encrypt->decode( $user_row->license_number );
+			}
 
 			// Send user data to view
 			$view_data['user_data'] = $user_row;
 
 			// Set destination for file storage.
 			$view_data['upload_destination'] = config_item('profile_image_destination');
+
+			// Role specific form
+			$view_data['role_specific_form'] = $this->load->view( 'user/self_update/self_update_' . $role, $view_data, TRUE );
 
 			$data = array(
 				'content' => $this->load->view( 'user/self_update', $view_data, TRUE ),
@@ -387,6 +396,7 @@ class User extends MY_Controller {
 	private function _delete_profile_image()
 	{
 		if( $model_response = $this->user_model->update_user( 
+			$this->auth_role,
 			$this->auth_user_id, 
 			'profile_image', 
 			array(), 

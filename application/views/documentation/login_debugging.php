@@ -58,7 +58,7 @@ DEBUG - 2012-09-15 10:54:17 -->
  posted/hashed password          = $2a$09 ...
  required level                  = 1
  user level in database          = 9
- user level in database (string) = Admin</pre>
+ user level in database (string) = admin</pre>
 </div>
 <p>
 	Your likely to see something like this if the password in the database isn't the same as the one you are trying to use to login with. If this is the case, the values for the passwords won't match. If you've migrated to another server, and you are sure that the password you are trying to login with is correct, then it could be that the password was created on a server that used a different hashing algorithm than the new server. All of your users would need to go through the user recovery process.
@@ -89,7 +89,7 @@ DEBUG - 2012-09-15 11:27:17 -->
  user agent from database        = &lt;hash value>
  required level                  = 1
  user level in database          = 9
- user level in database (string) = Admin</pre>
+ user level in database (string) = admin</pre>
 </div>
 <p>
 	As I mentioned above, if you use FirePHP, turn it off before going further. I've learned the hard way that when things go nuts that disabling FirePHP is the key to success. Disabling FirePHP is done in Firefox, not in Community Auth.

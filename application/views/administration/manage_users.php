@@ -61,7 +61,7 @@
 				<th class="icon-column"></th>
 				<th>username</th>
 				<th>email address</th>
-				<th>user level</th>
+				<th>role</th>
 			</tr>
 		</thead>
 		<tbody>

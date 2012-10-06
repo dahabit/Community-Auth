@@ -58,7 +58,7 @@
 					Please make sure to disable or remove the Init Controller immediately after installation.
 				</p>
 				<p style="padding-bottom:5px;border-bottom:dashed 1px #555;margin-bottom:5px;">
-					More than one Admin may be created, but they must have different usernames and email addresses.
+					More than one admin may be created, but they must have different usernames and email addresses.
 				</p>
 				<p style="padding-bottom:5px;">
 					Test users should be created before any other users because their user IDs are not checked for duplicates.

@@ -78,7 +78,7 @@ class Formval_callbacks extends CI_Model {
 	public function _email_exists_check( $email )
 	{
 		$query = $this->db->get_where( 
-			$this->config->item('user_table'), 
+			config_item('user_table'), 
 			array( 
 				'user_email' => $email 
 			) 
@@ -116,7 +116,7 @@ class Formval_callbacks extends CI_Model {
 		$user_id = ( $argument[0] == 'update_user' ) ? $this->uri->segment(3) : config_item('auth_user_id');
 
 		$query = $this->db->get_where( 
-			$this->config->item('user_table'), 
+			config_item('user_table'), 
 			array( 
 				'user_email' => $email, 
 				'user_id !=' => $user_id 
@@ -148,7 +148,7 @@ class Formval_callbacks extends CI_Model {
 	public function _username_check( $user_name )
 	{
 		$query = $this->db->get_where( 
-			$this->config->item('user_table'), 
+			config_item('user_table'), 
 			array( 
 				'user_name' => $user_name 
 			) 

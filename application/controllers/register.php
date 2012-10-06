@@ -46,7 +46,7 @@ class Register extends MY_Controller {
 				$_POST['user_level'] = 1;
 
 				$this->load->model('user_model');
-				$this->user_model->create_user( array(), 'self_created' );
+				$this->user_model->create_user( 'customer', array() );
 			}
 
 			/*
@@ -143,7 +143,7 @@ class Register extends MY_Controller {
 	public function settings()
 	{
 		// Only the admin can change registration modes
-		if( $this->require_role('Admin') )
+		if( $this->require_role('admin') )
 		{
 			// Load resources
 			$this->load->library('csrf');
@@ -176,7 +176,7 @@ class Register extends MY_Controller {
 	public function pending_registrations()
 	{
 		// Admin or manager login required
-		if( $this->require_role('Admin,Manager') )
+		if( $this->require_role('admin,manager') )
 		{
 			// Load resources
 			$this->load->library('csrf');

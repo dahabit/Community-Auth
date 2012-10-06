@@ -55,7 +55,7 @@
 	This is where you create the user types that will be used by your application. Your specific application will probably have different account types, but if you are just testing Community Auth, and intend to use the example controllers, you should leave these account types as is for now.
 </p>
 <p>
-	If you are going to change the account types, <b>Admin always needs to be called Admin</b>, but you can create as many different user types as you want. Using some functions of the authentication library, priveledges are linear in nature, so keep that in mind as you create the levels. Also, if you want to create user levels that are numbered higher than 99, make sure to adjust the user_level field in the users table to accomodate the larger number.
+	If you are going to change the account types, <b>admin always needs to be called admin</b>, but you can create as many different user types as you want. Using some functions of the authentication library, priveledges are linear in nature, so keep that in mind as you create the levels. Also, if you want to create user levels that are numbered higher than 99, make sure to adjust the user_level field in the users table to accomodate the larger number.
 </p>
 <h3>Account Groups</h3>
 <p>
@@ -82,7 +82,7 @@
 	This setting controls how long a person is locked out when they exceed the maximum allowed login attempts. The default setting is 600 seconds, or 10 minutes. When locked out, password recovery is also disabled.
 </p>
 <p>
-	This setting has nothing to do with IP adresses that are added to the deny list by the Deny Access functionality. Those IP addresses are permanently blocked until an Admin removes the block.
+	This setting has nothing to do with IP adresses that are added to the deny list by the Deny Access functionality. Those IP addresses are permanently blocked until an admin removes the block.
 </p>
 <h3>Disallow Multiple Logins</h3>
 <p>

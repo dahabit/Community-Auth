@@ -20,7 +20,7 @@
 </ul>
 <h2>Usage</h2>
 <p>
-	Congratulations, if you've made it this far in the installation, you should be able to login and browse through the Admin area of the example application. <?php echo anchor('documentation/login_debugging', 'Learn how to debug login if you cannot.'); ?> Since we both know that you have your own usage needs, you will need to know how to enforce authentication in your controllers, and how to detect who is who in views.
+	Congratulations, if you've made it this far in the installation, you should be able to login and browse through the admin area of the example application. <?php echo anchor('documentation/login_debugging', 'Learn how to debug login if you cannot.'); ?> Since we both know that you have your own usage needs, you will need to know how to enforce authentication in your controllers, and how to detect who is who in views.
 </p>
 <h3>Enforcing Authentication by Account Level Name</h3>
 <p>
@@ -28,7 +28,7 @@
 </p>
 <div class="doc_code">
 	<pre class="brush: php; toolbar: false;">
-		if( $this->require_role('Admin,Manager') )
+		if( $this->require_role('admin,manager') )
 		{
 			// Do something ...	
 		}</pre>
@@ -39,7 +39,7 @@
 <h3>Enforcing Authentication by Account Group Name</h3>
 <div class="doc_code">
 	<pre class="brush: php; toolbar: false;">
-		if( $this->require_group('Employees') )
+		if( $this->require_group('employees') )
 		{
 			// Do something ...	
 		}</pre>
@@ -49,7 +49,7 @@
 </p>
 <h3>Enforcing Authentication by Account Level Number</h3>
 <p>
-	If your account types have linear permissions, such as Admin who can alter Managers who can alter Customers, and the Admin is level 9, the Managers are level 6, and the Customers are level 1, then we can authenticate and allow access to the Admin and Managers by using the following inside the method of one of your controllers:
+	If your account types have linear permissions, such as admin who can alter managers who can alter customers, and the admin is level 9, the managers are level 6, and the customers are level 1, then we can authenticate and allow access to the admin and managers by using the following inside the method of one of your controllers:
 </p>
 <div class="doc_code">
 	<pre class="brush: php; toolbar: false;">

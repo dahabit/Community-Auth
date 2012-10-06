@@ -20,7 +20,7 @@ class Contact extends MY_Controller {
 	 * but it not, then you may remove the functionality
 	 * associated with this class member.
 	 */
-	private $offline = FALSE;
+	private $offline = TRUE;
 
 	/**
 	 * Class constructor

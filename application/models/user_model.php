@@ -35,14 +35,15 @@ class User_model extends MY_Model {
 	/**
 	 * Create a new user
 	 * 
+	 * @param   string  the user type to be created
 	 * @param   array  pre-validated data to insert into the user and profile records
 	 * @return  bool
 	 */
-	public function create_user( $insert_array = array(),  $type = 'standard' )
+	public function create_user( $role, $insert_array = array() )
 	{
 		// The form validation class doesn't allow for multiple config files, so we do it the old fashion way
-		$this->config->load( 'form_validation/administration/create_user' );
-		$this->validation_rules = config_item( $type . '_user_creation_rules' );
+		$this->config->load( 'form_validation/administration/create_user/create_' . $role );
+		$this->validation_rules = config_item( $role . '_creation_rules' );
 
 		// If the data is already validated, there's no reason to do it again
 		if( ! empty( $insert_array ) OR $this->validate() === TRUE )
@@ -51,9 +52,17 @@ class User_model extends MY_Model {
 			$user_data = array(
 				'user_name'  => ( isset( $insert_array['user_name'] ) ) ? $insert_array['user_name'] : set_value('user_name'),
 				'user_pass'  => ( isset( $insert_array['user_pass'] ) ) ? $insert_array['user_pass'] : set_value('user_pass'),
-				'user_email' => ( isset( $insert_array['user_email'] ) ) ? $insert_array['user_email'] : set_value('user_email'),
-				'user_level' => ( isset( $insert_array['user_level'] ) ) ? $insert_array['user_level'] : set_value('user_level')
+				'user_email' => ( isset( $insert_array['user_email'] ) ) ? $insert_array['user_email'] : set_value('user_email')
 			);
+
+			// User level derived directly from the role argument
+			foreach( $this->authentication->account_types as $k => $v )
+			{
+				if( $role == $v )
+				{
+					$user_data['user_level'] = $k;
+				}
+			}
 
 			// If we are using form validation for the user creation
 			if( empty( $insert_array ) )
@@ -62,8 +71,7 @@ class User_model extends MY_Model {
 				$this->form_validation->unset_field_data( array(
 					'user_name',
 					'user_pass',
-					'user_email',
-					'user_level'
+					'user_email'
 				));
 
 				// Create array of profile data
@@ -83,15 +91,17 @@ class User_model extends MY_Model {
 				unset( $insert_array['user_name'] );
 				unset( $insert_array['user_pass'] );
 				unset( $insert_array['user_email'] );
-				unset( $insert_array['user_level'] );
 
 				// Profile data is insert array
 				$profile_data = $insert_array;
 			}
 
 			// Encrypt any sensitive data
-			$this->load->library('encrypt');
-			$profile_data['license_number'] = $this->encrypt->encode( $profile_data['license_number'] );
+			if( isset( $profile_data['license_number'] ) )
+			{
+				$this->load->library('encrypt');
+				$profile_data['license_number'] = $this->encrypt->encode( $profile_data['license_number'] );
+			}
 
 			// Create a random user id if not already set
 			$random_unique_int = $this->get_unused_id();
@@ -110,13 +120,13 @@ class User_model extends MY_Model {
 
 			// Insert data in user table
 			$this->db->set($user_data)
-						->insert($this->config->item('user_table'));
+						->insert( config_item('user_table'));
 
 			$profile_data['user_id'] = $random_unique_int;
 
 			// Insert data in profile table
 			$this->db->set($profile_data)
-						->insert($this->config->item('profiles_table'));
+						->insert( config_item( $role . '_profiles_table'));
 
 			// Complete transaction
 			$this->db->trans_complete();
@@ -147,7 +157,7 @@ class User_model extends MY_Model {
 	{
 		// Query database for user to be deleted
 		$query = $this->db->select('user_level')
-			->from( $this->config->item('user_table') )
+			->from( config_item('user_table') )
 			->where('user_id', $user_id)
 			->limit(1)
 			->get();
@@ -165,13 +175,16 @@ class User_model extends MY_Model {
 
 				// Delete user table record
 				$this->db->delete( 
-					$this->config->item('user_table'), 
+					config_item('user_table'), 
 					array( 'user_id' => $user_id ) 
 				);
 
+				// Get the user's role
+				$role = $this->authentication->account_types[$user_data->user_level];
+
 				// Delete profile table record
 				$this->db->delete( 
-					$this->config->item('profiles_table'), 
+					config_item( $role . '_profiles_table'), 
 					array( 'user_id' => $user_id ) 
 				);
 
@@ -201,7 +214,7 @@ class User_model extends MY_Model {
 	 * @param  array   the data to update in the profile table
 	 * @return bool
 	 */
-	public function update_user( $the_user, $update_type, $user_data = array(), $profile_data = array() )
+	public function update_user( $role, $the_user, $update_type, $user_data = array(), $profile_data = array() )
 	{
 		// Load the appropriate form validation rules from the config file
 		$this->config->load( 'form_validation/user/user_update' );
@@ -209,10 +222,10 @@ class User_model extends MY_Model {
 		switch( $update_type )
 		{
 			case 'self_update':
-				$this->validation_rules = config_item('self_update');
+				$this->validation_rules = config_item( 'self_update_' . $role );
 				break;
 			case 'update_user':
-				$this->validation_rules = config_item('update_user');
+				$this->validation_rules = config_item( 'update_user_' . $role );
 				break;
 
 			case 'profile_image':
@@ -282,7 +295,7 @@ class User_model extends MY_Model {
 			if( ! empty( $profile_arr ) )
 			{
 				$this->db->where('user_id', $the_user)
-				->update( config_item('profiles_table'), $profile_arr );
+				->update( config_item( $role . '_profiles_table'), $profile_arr );
 			}
 
 			// If a self update, recreate the auth_identifier
@@ -370,8 +383,22 @@ class User_model extends MY_Model {
 		// Update profile record
 		if( ! empty( $profile_data ) )
 		{
-			$this->db->where('user_id', $the_user)
-				->update( config_item('profiles_table'), $profile_data );
+			// Get the user_level so we know what profile table to update
+			$query = $this->db->select('user_level')
+				->where('user_id', $the_user)
+				->limit(1)
+				->get( config_item('user_table') );
+
+			if( $query->num_rows() == 1 )
+			{
+				$row = $query->row();
+
+				// Get the user's role
+				$role = $this->authentication->account_types[$row->user_level];
+
+				$this->db->where('user_id', $the_user)
+					->update( config_item( $role . '_profiles_table'), $profile_data );
+			}
 		}
 
 		// Complete transaction
@@ -397,7 +424,7 @@ class User_model extends MY_Model {
 	public function get_recovery_data( $email )
 	{
 		$query = $this->db->select('u.user_id, u.user_salt, u.user_email, u.user_banned')
-			->from($this->config->item('user_table') . ' u')
+			->from( config_item('user_table') . ' u')
 			->where('u.user_email', $email)
 			->limit(1)
 			->get();
@@ -419,7 +446,7 @@ class User_model extends MY_Model {
 	public function get_recovery_verification_data( $user_id )
 	{
 		$query = $this->db->select('user_name,user_salt,passwd_recovery_code')
-			->from( $this->config->item('user_table') )
+			->from( config_item('user_table') )
 			->where( 'user_id', $user_id )
 			->where( 'passwd_recovery_date >', time() - config_item('recovery_code_expiration') )
 			->limit(1)
@@ -487,7 +514,7 @@ class User_model extends MY_Model {
 				$this->db->where( 'passwd_recovery_code', $special_string );
 			}
 
-			$query = $this->db->get_where( $this->config->item('user_table') );
+			$query = $this->db->get_where( config_item('user_table') );
 
 			// If above query indicates a match, change the password
 			if( $query->num_rows() == 1 )
@@ -503,7 +530,7 @@ class User_model extends MY_Model {
 				);
 
 				$this->db->where( 'user_id', $user_data->user_id )
-					->update( $this->config->item('user_table'), $data );
+					->update( config_item('user_table'), $data );
 			}
 		}
 	}
@@ -514,31 +541,44 @@ class User_model extends MY_Model {
 	 * Get a user record by user ID
 	 * 
 	 * @param   int    the user ID
+	 * @param   string  specific field to select from row
 	 * @return  mixed  either the query data or FALSE
 	 */
-	public function view_user_record( $user_id, $fields = FALSE )
+	public function view_user_record( $user_id, $field = FALSE )
 	{
 		if( (int) $user_id !== 0 )
 		{
-			if( $fields === FALSE )
-			{
-				$this->db->select('u.*, p.*');
-			}
-			else
-			{
-				$this->db->select( $fields );
-			}
+			$query = $this->db->select( $field === FALSE ? '*' : $field )
+				->where('user_id', $user_id)
+				->limit(1)
+				->get( config_item('user_table') );
 
-			$this->db->from($this->config->item('user_table') . ' u')
-				->join($this->config->item('profiles_table') . ' p','u.user_id = p.user_id', 'left')
-				->where('p.user_id', $user_id)
-				->limit(1);
-
-			$query = $this->db->get();
-			
 			if( $query->num_rows() == 1 )
 			{
-				return $query->row();
+				$row = $query->row_array();
+
+				if( ! $field )
+				{
+					// Get profile data
+					$role = $this->authentication->account_types[$row['user_level']];
+
+					// Profile data query
+					$query = $this->db->select('*')
+						->from( config_item( $role . '_profiles_table') )
+						->where( 'user_id', $row['user_id'] )
+						->limit(1)
+						->get();
+
+					if ( $query->num_rows() == 1 )
+					{
+						// Merge the user data and profile data and return
+						return (object) array_merge( $row,  $query->row_array() );
+					}
+				}
+				else
+				{
+					return $row[$field];
+				}
 			}
 		}
 
@@ -575,11 +615,10 @@ class User_model extends MY_Model {
 		// If this is the actual data query, we want to add a SELECT to our query
 		if( ! $count )
 		{
-			$this->db->select('u.*, p.*');
+			$this->db->select('u.*');
 		}
 
-		$this->db->from($this->config->item('user_table') . ' u');
-		$this->db->join($this->config->item('profiles_table') . ' p','u.user_id = p.user_id', 'left');
+		$this->db->from( config_item('user_table') . ' u');
 		$this->db->where('u.user_level <', $this->query_params['user_level'] );
 
 		// If this is a search, it may change the number of results
@@ -631,13 +670,13 @@ class User_model extends MY_Model {
 		{
 			// Generate unused user ID
 			$query = $this->db->where('user_id', $random_unique_int)
-								->get_where($this->config->item('user_table'));
+								->get_where( config_item('user_table'));
 		}
 		else
 		{
 			// Generate unused registration ID
 			$query = $this->db->where('reg_id', $random_unique_int)
-								->get_where($this->config->item('temp_reg_data_table'));
+								->get_where( config_item('temp_reg_data_table'));
 		}
 
 		if ($query->num_rows() > 0)

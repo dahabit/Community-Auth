@@ -160,3 +160,12 @@ pip-log.txt
 
 # Mac crap
 .DS_Store
+
+#Brian Gottier
+community-auth-v2.sublime-project
+community-auth-v2.sublime-workspace
+development/
+brute.php
+.hg
+.hgignore
+.hgtags

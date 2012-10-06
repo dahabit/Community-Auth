@@ -29,26 +29,69 @@ class Administration extends MY_Controller {
 	/**
 	 * Create a user 
 	 */
-	public function create_user()
+	public function create_user( $type = '' )
 	{
-		// Make sure an Admin or Manager is logged in. (showing how to log in by group)
-		if( $this->require_group('Employees') )
+		// Make sure an admin or manager is logged in. (showing how to log in by group)
+		if( $this->require_group('employees') )
 		{
 			// Load resources
 			$this->load->library('csrf');
 
-			$view_data = array();
+			$view_data['account_types'] = $this->authentication->account_types;
 
-			// Check if a valid form submission has been made
-			if( $this->csrf->token_match )
+			if( ! empty( $type ) )
 			{
-				// Create the user
-				$this->load->model('user_model');
-				$this->user_model->create_user();
+				// Convert $type to int
+				foreach( $this->authentication->account_types as $k => $v )
+				{
+					if( $type == $v )
+					{
+						$view_data['level'] = $k;
+						$view_data['type'] = $v;
+					}
+				}
+
+				// Confirm the type of user is permitted
+				if( $this->auth_level <= $view_data['level'] )
+				{
+					die();
+				}
+
+				// Check if a valid form submission has been made
+				if( $this->csrf->token_match )
+				{
+					// Create the user
+					$this->load->model('user_model');
+					$this->user_model->create_user( $type );
+				}
+
+				// Load the appropriate user creation form
+				$view_data['user_creation_form'] = $this->load->view( 'administration/create_user/create_' . $type, '', TRUE );
+			}
+
+			/**
+			 * If there is only one choice of user types to create,
+			 * we'll just automatically redirect to that choice
+			 */
+			else
+			{
+				foreach( $this->authentication->account_types as $k => $v )
+				{
+					if( $k < $this->auth_level )
+					{
+						$types[] = $v;
+					}
+				}
+
+				// If there's only one choice
+				if( isset( $types ) && count( $types ) == 1 )
+				{
+					redirect( secure_site_url('administration/create_user/' . $types[0] ) );
+				}
 			}
 
 			$data = array(
-				'content' => $this->load->view( 'administration/create_user', $view_data, TRUE ),
+				'content' => $this->load->view( 'administration/create_user', ( isset( $view_data ) ) ? $view_data : '', TRUE ),
 
 				// Load the show password script
 				'javascripts' => array(
@@ -83,7 +126,7 @@ class Administration extends MY_Controller {
 	public function manage_users( $page = 1 )
 	{
 		// Make sure an admin or manager is logged in
-		if( $this->require_role('Admin,Manager') )
+		if( $this->require_role('admin,manager') )
 		{
 			// Load resources
 			$this->load->library('csrf');
@@ -209,7 +252,7 @@ class Administration extends MY_Controller {
 	public function delete_user( $user_to_delete = FALSE, $page = FALSE )
 	{
 		// Make sure admin or manager is logged in
-		if( $this->require_role('Admin,Manager') )
+		if( $this->require_role('admin,manager') )
 		{
 			// Load resources
 			$this->load->library('csrf');
@@ -269,7 +312,7 @@ class Administration extends MY_Controller {
 	public function update_user( $the_user = 0 )
 	{
 		// Make sure an admin or manager is logged in
-		if( $this->require_role('Admin,Manager') )
+		if( $this->require_role('admin,manager') )
 		{
 			// Load resources
 			$this->load->library('csrf');
@@ -278,16 +321,21 @@ class Administration extends MY_Controller {
 			$this->config->load('uploads_manager');
 
 			// Get the user level of the user to be updated
-			$users_level_query = $this->user_model->view_user_record( $the_user, 'u.`user_level`' );
+			$users_level = $this->user_model->view_user_record( $the_user, 'user_level' );
 
 			/**
 			 * If the user to be updated has a user level greater than or equal
 			 * to the logged in user, then we don't want to show the user's details
 			 */
-			if( $users_level_query->user_level >= $this->auth_level )
+			if( $users_level >= $this->auth_level )
 			{
 				die();
 			}
+
+			/**
+			 * Get the role associated with the user level
+			 */
+			$role = $this->authentication->account_types[$users_level];
 
 			/*
 			 * Check if form posted
@@ -295,20 +343,22 @@ class Administration extends MY_Controller {
 			if( $this->csrf->token_match )
 			{
 				// Update the user
-				$this->user_model->update_user( $the_user, 'update_user' );
+				$this->user_model->update_user( $role, $the_user, 'update_user' );
 			}
 
-			// If this is an update, just show that user
+			// Show the current user and profile record
 			$user_row = $this->user_model->view_user_record( $the_user );
 
 			// Decrypt any sensitive data for display
-			$user_row->license_number = $this->encrypt->decode( $user_row->license_number );
+			if( isset( $user_row->license_number ) )
+			{
+				$user_row->license_number = $this->encrypt->decode( $user_row->license_number );
+			}
 
 			// Send user data to view
 			$view_data['user_data'] = $user_row;
 
 			$data = array(
-				'content' => $this->load->view( 'administration/update_user', $view_data, TRUE ),
 
 				// Load the show password script
 				'javascripts' => array(
@@ -325,7 +375,9 @@ class Administration extends MY_Controller {
 							$("#show-password").passwordToggle({target:"#user_pass_confirm"});
 						});
 					</script>
-				'
+				',
+
+				'content' => $this->load->view( 'administration/update_user/update_' . $role, $view_data, TRUE )
 			);
 
 			$this->load->view( $this->template, $data );
@@ -341,12 +393,12 @@ class Administration extends MY_Controller {
 	 * your local Apache configuration file. Please note that we've 
 	 * all had experiences where a little mistake in one of these
 	 * files can bring down the whole website. For this reason, 
-	 * access is restricted to Admin only.
+	 * access is restricted to admin only.
 	 */
 	public function deny_access()
 	{
 		// Make sure admin is logged in
-		if( $this->require_role('Admin') )
+		if( $this->require_role('admin') )
 		{
 			if( config_item('deny_access') > 0 )
 			{

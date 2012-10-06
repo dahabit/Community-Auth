@@ -1,6 +1,6 @@
 <?php if( ! defined('BASEPATH') ) exit('No direct script access allowed');
 /**
- * Community Auth - Update User View
+ * Community Auth - Update Customer View
  *
  * Community Auth is an open source authentication application for CodeIgniter 2.1.2
  *
@@ -12,7 +12,7 @@
  */
 ?>
 
-<h1>Update User Account</h1>
+<h1>Update Customer Profile</h1>
 
 <?php
 if( isset( $validation_passed ) )
@@ -20,7 +20,7 @@ if( isset( $validation_passed ) )
 	echo '
 		<div class="feedback confirmation" style="margin-bottom:10px;">
 			<p class="feedback_header">
-				The user account was successfully updated.
+				The customer profile was successfully updated.
 			</p>
 		</div>
 	';
@@ -30,13 +30,13 @@ else if( isset( $validation_errors ) )
 	echo '
 		<div class="feedback error_message" style="margin-bottom:10px;">
 			<p class="feedback_header">
-				User Account Update Contained The Following Errors:
+				Customer Profile Update Contained The Following Errors:
 			</p>
 			<ul>
 				' . $validation_errors . '
 			</ul>
 			<p>
-				USER ACCOUNT NOT UPDATED
+				CUSTOMER PROFILE NOT UPDATED
 			</p>
 		</div>
 	';
@@ -110,26 +110,6 @@ else if( isset( $validation_errors ) )
 			<div class="form-row">
 
 				<?php
-					// LICENSE NUMBER LABEL AND INPUT ***********************************
-					echo form_label('License Number','license_number',array('class'=>'form_label'));
-
-					echo input_requirement('*');
-
-					$input_data = array(
-						'name'		=> 'license_number',
-						'id'		=> 'license_number',
-						'class'		=> 'form_input alpha_numeric',
-						'value'		=> set_value('license_number', $user_data->license_number),
-						'maxlength'	=> '8',
-					);
-					echo form_input($input_data);
-
-				?>
-
-			</div>
-			<div class="form-row">
-
-				<?php
 					// EMAIL ADDRESS LABEL AND INPUT **********************************************
 					echo form_label('Email Address','user_email',array('class'=>'form_label'));
 
@@ -150,32 +130,80 @@ else if( isset( $validation_errors ) )
 			<div class="form-row">
 
 				<?php
-					// USER LEVEL SELECTION *******************************************************
-					echo form_label('Select User Level','user_level',array('class'=>'form_label'));
+					// STREET ADDRESS LABEL AND INPUT ***********************************
+					echo form_label('Street Address','street_address',array('class'=>'form_label'));
 
-					echo input_requirement();
+					echo input_requirement('*');
 
-					$account_types = config_item('account_types');
+					$input_data = array(
+						'name'		=> 'street_address',
+						'id'		=> 'street_address',
+						'class'		=> 'form_input max_chars',
+						'value'		=> set_value('street_address', $user_data->street_address),
+						'maxlength'	=> '60',
+					);
+					echo form_input($input_data);
 
-					if($user_data->user_name == $auth_user_name)
-					{
-						$temp_var = $auth_level;
-						$level_options[$temp_var] = $account_types[$temp_var];
-					}
-					else
-					{
-						foreach($account_types as $num => $text){
-							//There can only be one Sudo
-							//Users can only create accounts of lesser account level than there own
-							$admin_level_number = array_search( 'Admin', $this->authentication->account_types );
+				?>
 
-							if( $num < $auth_level && $num != $admin_level_number )
-							{
-								$level_options[$num] = $text;
-							}
-						}
-					}
-					echo form_dropdown('user_level', $level_options, set_value('user_level', $user_data->user_level), 'id="level_select" class="form_select"');
+			</div>
+			<div class="form-row">
+
+				<?php
+					// CITY LABEL AND INPUT ***********************************
+					echo form_label('City','city',array('class'=>'form_label'));
+
+					echo input_requirement('*');
+
+					$input_data = array(
+						'name'		=> 'city',
+						'id'		=> 'city',
+						'class'		=> 'form_input max_chars',
+						'value'		=> set_value('city', $user_data->city),
+						'maxlength'	=> '60',
+					);
+					echo form_input($input_data);
+
+				?>
+
+			</div>
+			<div class="form-row">
+
+				<?php
+					// STATE LABEL AND INPUT ***********************************
+					echo form_label('State','state',array('class'=>'form_label'));
+
+					echo input_requirement('*');
+
+					$input_data = array(
+						'name'		=> 'state',
+						'id'		=> 'state',
+						'class'		=> 'form_input max_chars',
+						'value'		=> set_value('state', $user_data->state),
+						'maxlength'	=> '50',
+					);
+					echo form_input($input_data);
+
+				?>
+
+			</div>
+			<div class="form-row">
+
+				<?php
+					// STATE LABEL AND INPUT ***********************************
+					echo form_label('Zip','zip',array('class'=>'form_label'));
+
+					echo input_requirement('*');
+
+					$input_data = array(
+						'name'		=> 'zip',
+						'id'		=> 'zip',
+						'class'		=> 'form_input max_chars',
+						'value'		=> set_value('zip', $user_data->zip),
+						'maxlength'	=> '10',
+					);
+					echo form_input($input_data);
+
 				?>
 
 			</div>
@@ -326,5 +354,5 @@ else if( isset( $validation_errors ) )
 
 <?php
 
-/* End of file update_user.php */
-/* Location: /application/views/update_user.php */
+/* End of file update_customer.php */
+/* Location: /application/views/update_user.update_customer.php */

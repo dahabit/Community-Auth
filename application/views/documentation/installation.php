@@ -30,7 +30,7 @@
 	If you haven't done so already, edit the authentication config file located at <b>/application/config/authentication.php</b> in your text editor. Set the <b>Disable Installer</b> setting to FALSE.
 </p>
 <p>
-	Browse to the <?php echo secure_anchor('init', 'init controller'); ?>, and use the interface to populate your database with tables, create your Admin, or create a set of test users.
+	Browse to the <?php echo secure_anchor('init', 'init controller'); ?>, and use the interface to populate your database with tables, create your admin, or create a set of test users.
 </p>
 <p style="color:red;font-weight:bold;">
 	Please disable or remove the init controller <br />and the sql file when you are finished.<br />Change the Disable Installer setting back to TRUE.

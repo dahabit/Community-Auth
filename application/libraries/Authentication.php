@@ -215,15 +215,16 @@ class Authentication
 						 * data in another cookie. For instance, the `user_name` 
 						 * is used to have a logout button on standard HTTP pages.
 						 *
-						 * If auth_model->get_auth_data() joined the user profile
-						 * table, you might also add the user's first and last name
-						 * or other data that is not sensitive. Please do not
-						 * add sensitive data to the http user cookie.
+						 * auth_model->get_auth_data() responds with some user profile
+						 * data, and you might add other data that is not sensitive. 
+						 * Please do not add sensitive data to the http user cookie.
 						 */
 						$http_user_cookie = array(
 							'name'   => config_item('http_user_cookie_name'),
 							'value'  => $this->CI->session->serialize_data( array(
-								'_user_name' => $auth_data->user_name
+								'_user_name'  => $auth_data->user_name,
+								'_first_name' => $auth_data->first_name,
+								'_last_name'  => $auth_data->last_name
 							) ),
 							'domain' => config_item('cookie_domain'),
 							'path'   => config_item('cookie_path'),

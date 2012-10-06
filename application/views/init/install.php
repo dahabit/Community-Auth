@@ -74,16 +74,16 @@
 </p>
 <p>
 	<?php
-		// Show the number of non-Admin users
+		// Show the number of non-admin users
 		if( isset( $basic_user_count ) && $basic_user_count > 0 )
 		{
 			$s = ( $basic_user_count == 1 ) ? '' : 's';
 
-			echo '<img src="img/green-check.jpg" alt="Green Check" /> ' . $basic_user_count . ' user' . $s . ' have been created ( Admin not included in count ).';
+			echo '<img src="img/green-check.jpg" alt="Green Check" /> ' . $basic_user_count . ' user' . $s . ' have been created ( admin not included in count ).';
 		}
 		else
 		{
-			echo '<img src="img/red-x.jpg" alt="Red X" /> 0 users have been created ( Admin not included in count ).';
+			echo '<img src="img/red-x.jpg" alt="Red X" /> 0 users have been created ( admin not included in count ).';
 		}
 	?>
 </p>
@@ -248,27 +248,6 @@
 								'class'		=> 'form_input last_name',
 								'value'		=> set_value('last_name'),
 								'maxlength'	=> '20',
-							);
-
-							echo form_input($input_data);
-
-						?>
-
-					</div>
-					<div class="form-row">
-
-						<?php
-							// ADMIN LICENSE NUMBER ***********************************
-							echo form_label('Admin License #','license_number',array('class'=>'form_label','style'=>'width: 181px;'));
-
-							echo input_requirement('*');
-
-							$input_data = array(
-								'name'		=> 'license_number',
-								'id'		=> 'license_number',
-								'class'		=> 'form_input alpha_numeric',
-								'value'		=> set_value('license_number'),
-								'maxlength'	=> '8',
 							);
 
 							echo form_input($input_data);

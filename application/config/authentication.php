@@ -30,7 +30,7 @@ $config['disable_installer'] = TRUE;
 | -----------------------------------------------------------------
 | This definition sets the account types that will be used for authentication.
 |
-| Admin should remain being called Admin, but the key may be changed. 
+| Admin should remain being called "admin", but the key may be changed. 
 | Keep in mind that if you change the number to higher than 9, then the 
 | user_level field of the users table will need to be adjusted.
 |
@@ -39,9 +39,9 @@ $config['disable_installer'] = TRUE;
 */
 
 $config['account_types'] = array(
-	'1' => 'Customer',
-	'6' => 'Manager',
-	'9' => 'Admin'
+	'1' => 'customer',
+	'6' => 'manager',
+	'9' => 'admin'
 );
 
 /*
@@ -53,7 +53,7 @@ $config['account_types'] = array(
 */
 
 $config['account_groups'] = array(
-	'Employees' => 'Manager,Admin'
+	'employees' => 'manager,admin'
 );
 
 /*

@@ -48,11 +48,6 @@ $config['install_rules'] = array(
 		'rules' => 'trim|xss_clean'
 	),
 	array(
-		'field' => 'license_number',
-		'label' => 'ADMIN LICENSE NUMBER',
-		'rules' => 'trim|alpha_numeric|max_length[8]'
-	),
-	array(
 		'field' => 'users',
 		'label' => 'TEST USERS CHECKBOX',
 		'rules' => 'trim|integer'

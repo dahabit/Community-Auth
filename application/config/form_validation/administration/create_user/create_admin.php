@@ -1,6 +1,6 @@
 <?php if( ! defined('BASEPATH') ) exit('No direct script access allowed');
 /**
- * Community Auth - Form Validation Rules for Registration Form
+ * Community Auth - Form Validation Rules for Admin Creation
  *
  * Community Auth is an open source authentication application for CodeIgniter 2.1.2
  *
@@ -11,7 +11,7 @@
  * @link        http://community-auth.com
  */
 
-$config['registration_form'] = array(
+$config['admin_creation_rules'] = array(
 	array(
 		'field' => 'user_name',
 		'label' => 'USERNAME',
@@ -30,34 +30,14 @@ $config['registration_form'] = array(
 	array(
 		'field' => 'last_name',
 		'label' => 'LAST NAME',
-		'rules' => 'trim|required|max_length[20]|xss_clean'
+		'rules' => 'trim|required|xss_clean'
 	),
 	array(
 		'field' => 'first_name',
 		'label' => 'FIRST NAME',
-		'rules' => 'trim|required|max_length[20]|xss_clean'
-	),
-	array(
-		'field' => 'street_address',
-		'label' => 'STREET ADDRESS',
-		'rules' => 'trim|required|xss_clean|max_length[60]'
-	),
-	array(
-		'field' => 'city',
-		'label' => 'CITY',
-		'rules' => 'trim|required|xss_clean|max_length[60]'
-	),
-	array(
-		'field' => 'state',
-		'label' => 'STATE or PROVINCE',
-		'rules' => 'trim|required|alpha|max_length[50]'
-	),
-	array(
-		'field' => 'zip',
-		'label' => 'ZIP or POSTAL CODE',
-		'rules' => 'trim|required|xss_clean|max_length[10]'
+		'rules' => 'trim|required|xss_clean'
 	)
 );
 
-/* End of file registration_form.php */
-/* Location: /application/config/form_validation/register/registration_form.php */
+/* End of file create_admin.php */
+/* Location: /application/config/form_validation/administration/create_user/create_admin.php */

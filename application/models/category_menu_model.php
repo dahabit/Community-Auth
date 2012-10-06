@@ -17,7 +17,7 @@ class Category_menu_model extends CI_Model {
 	{
 		// Get the complete category_menu table
 		$query = $this->db->order_by('parent_id','asc')
-			->get($this->config->item('category_menu_table'));
+			->get( config_item('category_menu_table') );
 
 		if( $query->num_rows() > 0 )
 		{

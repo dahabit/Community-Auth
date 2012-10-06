@@ -748,6 +748,7 @@ class MY_Upload extends CI_Upload {
 		$data = ( $file_string ) ? $file_string : $upload_details['file_url'];
 
 		$model_response = $this->CI->user_model->update_user(
+			config_item( 'auth_role' ),
 			config_item( 'auth_user_id' ),
 			'profile_image',
 			array(),

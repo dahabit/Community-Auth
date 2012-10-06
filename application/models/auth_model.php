@@ -14,12 +14,24 @@
 class Auth_model extends MY_Model {
 
 	/**
-	 * Check the user table to see if a user exists by username or email address.
-	 * Return data if there was a matching record.
+	 * An array of profile data to select when logging in or checking login.
+	 * Anything in this array should exist in all user profile tables
 	 *
-	 * While this query is rather limited, you could easily join the user 
-	 * profile table to return commonly used data that can be inserted into 
-	 * the http user cookie. Remember, however, that while encrypted by 
+	 * @var array
+	 * @access protected
+	 */
+	protected $selected_profile_columns = array(
+		'first_name',
+		'last_name'
+	);
+
+	/**
+	 * Check the user table to see if a user exists by username or email address.
+	 * If there was a matching record, combine with select profile data and 
+	 * return merged object.
+	 *
+	 * While this query is rather limited, you could easily add specific user 
+	 * profile data. Remember, however, that while encrypted by 
 	 * default, the http user cookie is tranmitted via standard http requests.
 	 * 
 	 * @param   string  either the username or email address of a user
@@ -27,6 +39,7 @@ class Auth_model extends MY_Model {
 	 */
 	public function get_auth_data( $user_string )
 	{
+		// Selected user table data
 		$selected_columns = array(
 			'user_name',
 			'user_email',
@@ -38,6 +51,7 @@ class Auth_model extends MY_Model {
 			'user_banned'
 		);
 
+		// User table query
 		$query = $this->db->select( $selected_columns )
 			->from( config_item('user_table') )
 			->where( 'user_name', $user_string )
@@ -47,7 +61,23 @@ class Auth_model extends MY_Model {
 
 		if ( $query->num_rows() == 1 )
 		{
-			return $query->row();
+			$row = $query->row_array();
+
+			// Get the role associated with the user level
+			$role = $this->authentication->account_types[$row['user_level']];
+
+			// Profile data query
+			$query = $this->db->select( $this->selected_profile_columns )
+				->from( config_item( $role . '_profiles_table') )
+				->where( 'user_id', $row['user_id'] )
+				->limit(1)
+				->get();
+
+			if ( $query->num_rows() == 1 )
+			{
+				// Merge the user data and profile data and return
+				return (object) array_merge( $row,  $query->row_array() );
+			}
 		}
 
 		return FALSE;
@@ -89,6 +119,7 @@ class Auth_model extends MY_Model {
 	 */
 	public function check_login_status( $user_last_mod, $user_id, $login_time )
 	{
+		// Selected user table data
 		$selected_columns = array(
 			'user_name',
 			'user_email',
@@ -104,7 +135,7 @@ class Auth_model extends MY_Model {
 		$this->db->where( 'user_id', $user_id );
 
 		// If multiple devices are allowed to login at the same time, the user_login_time cannot be checked
-		if( $this->config->item('disallow_multiple_logins') === TRUE )
+		if( config_item('disallow_multiple_logins') === TRUE )
 		{
 			$this->db->where( 'user_login_time', $login_time );
 		}
@@ -114,7 +145,23 @@ class Auth_model extends MY_Model {
 
 		if ( $query->num_rows() == 1 )
 		{
-			return $query->row();
+			$row = $query->row_array();
+
+			// Get the role associated with the user level
+			$role = $this->authentication->account_types[$row['user_level']];
+
+			// Profile data query
+			$query = $this->db->select( $this->selected_profile_columns )
+				->from( config_item( $role . '_profiles_table') )
+				->where( 'user_id', $row['user_id'] )
+				->limit(1)
+				->get();
+
+			if ( $query->num_rows() == 1 )
+			{
+				// Merge the user data and profile data and return
+				return (object) array_merge( $row,  $query->row_array() );
+			}
 		}
 
 		return FALSE;

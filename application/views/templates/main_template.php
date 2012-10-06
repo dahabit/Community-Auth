@@ -62,13 +62,13 @@
 		<div>
 			<?php
 				// Check if the user is logged in and on HTTPS
-				if( isset( $auth_user_name ) )
+				if( isset( $auth_first_name ) )
 				{
-					$_user_name = $auth_user_name;
+					$_user_first_name = $auth_first_name;
 				}
 
 				// Show the login / logout ...
-				echo ( isset( $_user_name ) ) ? 'Welcome, ' . $_user_name . ' &bull; ' . secure_anchor('user','User Index') . ' &bull; ' . secure_anchor('user/logout','Logout') : secure_anchor('register','Register') . ' &bull; ' . secure_anchor('user','Login');
+				echo ( isset( $_user_first_name ) ) ? 'Welcome, ' . $_user_first_name . ' &bull; ' . secure_anchor('user','User Index') . ' &bull; ' . secure_anchor('user/logout','Logout') : secure_anchor('register','Register') . ' &bull; ' . secure_anchor('user','Login');
 			?>
 		</div>
 	</div>
@@ -120,7 +120,7 @@
 							echo '</li>';
 						}
 
-						// If a Manager or Admin is logged in
+						// If a manager or admin is logged in
 						if( isset( $auth_level ) && $auth_level >= 6 )
 						{
 							echo '<li>';
@@ -136,7 +136,7 @@
 							echo '</li>';
 						}
 
-						// If an Admin is logged in
+						// If an admin is logged in
 						if( isset( $auth_level ) && $auth_level == 9 )
 						{
 							echo '<li>';

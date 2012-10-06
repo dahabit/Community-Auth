@@ -1,6 +1,6 @@
 <?php if( ! defined('BASEPATH') ) exit('No direct script access allowed');
 /**
- * Community Auth - Form Validation Rules for Registration Form
+ * Community Auth - Form Validation Rules for Customer Creation
  *
  * Community Auth is an open source authentication application for CodeIgniter 2.1.2
  *
@@ -11,7 +11,7 @@
  * @link        http://community-auth.com
  */
 
-$config['registration_form'] = array(
+$config['customer_creation_rules'] = array(
 	array(
 		'field' => 'user_name',
 		'label' => 'USERNAME',
@@ -30,12 +30,12 @@ $config['registration_form'] = array(
 	array(
 		'field' => 'last_name',
 		'label' => 'LAST NAME',
-		'rules' => 'trim|required|max_length[20]|xss_clean'
+		'rules' => 'trim|required|xss_clean'
 	),
 	array(
 		'field' => 'first_name',
 		'label' => 'FIRST NAME',
-		'rules' => 'trim|required|max_length[20]|xss_clean'
+		'rules' => 'trim|required|xss_clean'
 	),
 	array(
 		'field' => 'street_address',
@@ -59,5 +59,5 @@ $config['registration_form'] = array(
 	)
 );
 
-/* End of file registration_form.php */
-/* Location: /application/config/form_validation/register/registration_form.php */
+/* End of file create_customer.php */
+/* Location: /application/config/form_validation/administration/create_user/create_customer.php */
