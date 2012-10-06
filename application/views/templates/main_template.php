@@ -53,6 +53,9 @@
 
 	// Add anything else to the head
 	echo ( isset( $extra_head ) ) ? $extra_head : '';
+
+	// Add Google Analytics code if available in config
+	if( ! empty( $tracking_code ) ) echo $tracking_code; 
 ?>
 </head>
 <body id="<?php echo $this->router->fetch_class() . '-' . $this->router->fetch_method(); ?>" class="<?php echo $this->router->fetch_class(); ?>-controller <?php echo $this->router->fetch_method(); ?>-method">
@@ -89,7 +92,7 @@
 						?>
 					</li>
 					<li>
-						<a href="https://bitbucket.org/skunkbad/community-auth-ci-session-version/downloads">Download</a>
+						<a href="https://bitbucket.org/skunkbad/community-auth/downloads">Download</a>
 					</li>
 					<li>
 						<?php 

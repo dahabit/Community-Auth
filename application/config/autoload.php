@@ -80,7 +80,7 @@ $autoload['helper'] = array('html','url','form','cookie');
 |
 */
 
-$autoload['config'] = array('db_tables','authentication');
+$autoload['config'] = array('db_tables','authentication','google_analytics');
 
 
 /*

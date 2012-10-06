@@ -27,7 +27,8 @@
 |	['char_set'] The character set used in communicating with the database
 |	['dbcollat'] The character collation used in communicating with the database
 |				 NOTE: For MySQL and MySQLi databases, this setting is only used
-| 				 as a backup if your server is running PHP < 5.2.3 or MySQL < 5.0.7.
+| 				 as a backup if your server is running PHP < 5.2.3 or MySQL < 5.0.7
+|				 (and in table creation queries made with DB Forge).
 | 				 There is an incompatibility in PHP with mysql_real_escape_string() which
 | 				 can make your site vulnerable to SQL injection if you are using a
 | 				 multi-byte character set and are running versions lower than these.
@@ -44,61 +45,24 @@
 | the active record class
 */
 
-$active_group = ENVIRONMENT;
+$active_group = 'default';
 $active_record = TRUE;
 
-// DEVELOPMENT ENVIRONMENT ***********************************
-$db['development']['hostname'] = 'localhost';
-$db['development']['username'] = 'root';
-$db['development']['password'] = '';
-$db['development']['database'] = 'community_auth_v2';
-$db['development']['dbdriver'] = 'mysql';
-$db['development']['dbprefix'] = '';
-$db['development']['pconnect'] = TRUE;
-$db['development']['db_debug'] = TRUE;
-$db['development']['cache_on'] = FALSE;
-$db['development']['cachedir'] = '';
-$db['development']['char_set'] = 'utf8';
-$db['development']['dbcollat'] = 'utf8_general_ci';
-$db['development']['swap_pre'] = '';
-$db['development']['autoinit'] = TRUE;
-$db['development']['stricton'] = FALSE;
-
-
-// TESTING ENVIRONMENT ***************************************
-$db['testing']['hostname'] = '';
-$db['testing']['username'] = '';
-$db['testing']['password'] = '';
-$db['testing']['database'] = '';
-$db['testing']['dbdriver'] = 'mysql';
-$db['testing']['dbprefix'] = '';
-$db['testing']['pconnect'] = TRUE;
-$db['testing']['db_debug'] = TRUE;
-$db['testing']['cache_on'] = FALSE;
-$db['testing']['cachedir'] = '';
-$db['testing']['char_set'] = 'utf8';
-$db['testing']['dbcollat'] = 'utf8_general_ci';
-$db['testing']['swap_pre'] = '';
-$db['testing']['autoinit'] = TRUE;
-$db['testing']['stricton'] = FALSE;
-
-
-// PRODUCTION ENVIRONMENT ************************************
-$db['production']['hostname'] = '';
-$db['production']['username'] = '';
-$db['production']['password'] = '';
-$db['production']['database'] = '';
-$db['production']['dbdriver'] = 'mysql';
-$db['production']['dbprefix'] = '';
-$db['production']['pconnect'] = TRUE;
-$db['production']['db_debug'] = TRUE;
-$db['production']['cache_on'] = FALSE;
-$db['production']['cachedir'] = '';
-$db['production']['char_set'] = 'utf8';
-$db['production']['dbcollat'] = 'utf8_general_ci';
-$db['production']['swap_pre'] = '';
-$db['production']['autoinit'] = TRUE;
-$db['production']['stricton'] = FALSE;
+$db['default']['hostname'] = 'localhost';
+$db['default']['username'] = '';
+$db['default']['password'] = '';
+$db['default']['database'] = '';
+$db['default']['dbdriver'] = 'mysql';
+$db['default']['dbprefix'] = '';
+$db['default']['pconnect'] = TRUE;
+$db['default']['db_debug'] = TRUE;
+$db['default']['cache_on'] = FALSE;
+$db['default']['cachedir'] = '';
+$db['default']['char_set'] = 'utf8';
+$db['default']['dbcollat'] = 'utf8_general_ci';
+$db['default']['swap_pre'] = '';
+$db['default']['autoinit'] = TRUE;
+$db['default']['stricton'] = FALSE;
 
 
 /* End of file database.php */

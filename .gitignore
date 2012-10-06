@@ -162,10 +162,12 @@ pip-log.txt
 .DS_Store
 
 #Brian Gottier
-community-auth-v2.sublime-project
-community-auth-v2.sublime-workspace
+community-auth.sublime-project
+community-auth.sublime-workspace
 development/
+production/
 brute.php
 .hg
 .hgignore
 .hgtags
+mywot56f6e602e1a3f243f0c9.html

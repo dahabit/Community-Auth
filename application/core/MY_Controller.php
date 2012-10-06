@@ -149,6 +149,9 @@ class MY_Controller extends CI_Controller
 			$this->load->vars( $http_user_data );
 		}
 
+		// Get Google Analytics tracking code
+		$this->load->vars( array( 'tracking_code' => config_item('tracking_code') ) );
+
 		// Warn if installer is not disabled
 		$this->check_installer_disabled();
 
