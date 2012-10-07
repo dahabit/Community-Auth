@@ -38,15 +38,15 @@
 |
 */
 
-$route['default_controller'] = "static_pages";
+$route['default_controller'] = 'static_pages';
 $route['404_override']       = 'custom_error_page/error_404';
 
 // Static pages
-$route['screenshots']        = "static_pages/screenshots";
-$route['privacy']            = "static_pages/privacy";
-$route['license']            = "static_pages/license";
-$route['language_test']      = "static_pages/language_test";
-
+$route['language_test']      = 'static_pages/language_test';
+$route['license']            = 'static_pages/license';
+$route['privacy']            = 'static_pages/privacy';
+$route['robots.txt']         = 'static_pages/robots_txt';
+$route['screenshots']        = 'static_pages/screenshots';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

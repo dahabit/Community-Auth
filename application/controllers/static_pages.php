@@ -149,6 +149,27 @@ class Static_pages extends MY_Controller {
 	}
 
 	// --------------------------------------------------------------
+	
+	/**
+	 * robots.txt generation for development environment.
+	 * This is only here so to try to prevent an unmodified 
+	 * installation of Community Auth from appearing to be 
+	 * duplicate content by a search engine.
+	 */
+	public function robots_txt()
+	{
+		if( ENVIRONMENT == 'development' )
+		{
+			header("Content-Type: text/plain");
+			echo "User-agent: *\nDisallow: /\nNoindex: /\n";
+		}
+		else
+		{
+			show_404();
+		}
+	}
+	
+	// --------------------------------------------------------------
 }
 
 /* End of file static_pages.php */
