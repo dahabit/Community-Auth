@@ -208,12 +208,12 @@ class Authentication
 						// Login failed ...
 						log_message(
 							'debug',
-							"\n user is banned                  = " . ( $auth_data->user_banned === 1 ? 'yes' : 'no' ) .
-							"\n password in database            = " . $auth_data->user_pass .
-							"\n posted/hashed password          = " . $this->hash_passwd( $user_pass, $auth_data->user_salt ) . 
-							"\n required level                  = " . $required_level . 
-							"\n user level in database          = " . $auth_data->user_level . 
-							"\n user level in database (string) = " . $this->roles[$auth_data->user_level]
+							"\n user is banned             = " . ( $auth_data->user_banned === 1 ? 'yes' : 'no' ) .
+							"\n password in database       = " . $auth_data->user_pass .
+							"\n posted/hashed password     = " . $this->hash_passwd( $user_pass, $auth_data->user_salt ) . 
+							"\n required level             = " . $required_level . 
+							"\n user level in database     = " . $auth_data->user_level . 
+							"\n user level equivalant role = " . $this->roles[$auth_data->user_level]
 						);
 					}
 					else
