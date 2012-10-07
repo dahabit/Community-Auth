@@ -51,7 +51,7 @@ else
 		<ul class="std-list">
 	';
 
-	foreach( $account_types as $k => $v )
+	foreach( $roles as $k => $v )
 	{
 		if( $k < $auth_level )
 		{

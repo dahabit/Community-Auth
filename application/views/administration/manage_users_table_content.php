@@ -13,8 +13,6 @@
 
 if( $users_data !== FALSE )
 {
-	$account_types = config_item('account_types');
-
 	/**
 	 * Current page var allows delete method to redirect back here. 
 	 * This only applies if javascript is disabled.
@@ -57,7 +55,7 @@ if( $users_data !== FALSE )
 					. $user->user_email . 
 				'</td>
 				<td>' 
-					. $account_types[$user->user_level] . 
+					. $roles[$user->user_level] . 
 				'</td>
 			</tr>
 		';

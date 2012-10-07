@@ -56,13 +56,7 @@ class User_model extends MY_Model {
 			);
 
 			// User level derived directly from the role argument
-			foreach( $this->authentication->account_types as $k => $v )
-			{
-				if( $role == $v )
-				{
-					$user_data['user_level'] = $k;
-				}
-			}
+			$user_data['user_level'] = $this->authentication->levels[$role];
 
 			// If we are using form validation for the user creation
 			if( empty( $insert_array ) )
@@ -180,7 +174,7 @@ class User_model extends MY_Model {
 				);
 
 				// Get the user's role
-				$role = $this->authentication->account_types[$user_data->user_level];
+				$role = $this->authentication->roles[$user_data->user_level];
 
 				// Delete profile table record
 				$this->db->delete( 
@@ -394,7 +388,7 @@ class User_model extends MY_Model {
 				$row = $query->row();
 
 				// Get the user's role
-				$role = $this->authentication->account_types[$row->user_level];
+				$role = $this->authentication->roles[$row->user_level];
 
 				$this->db->where('user_id', $the_user)
 					->update( config_item( $role . '_profiles_table'), $profile_data );
@@ -560,7 +554,7 @@ class User_model extends MY_Model {
 				if( ! $field )
 				{
 					// Get profile data
-					$role = $this->authentication->account_types[$row['user_level']];
+					$role = $this->authentication->roles[$row['user_level']];
 
 					// Profile data query
 					$query = $this->db->select('*')

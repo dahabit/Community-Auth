@@ -50,16 +50,16 @@
 <p>
 	Set this configuration option to FALSE to enable access to the Community Auth installer. Make sure to disable the installer immediately after using it.
 </p>
-<h3>Account Types</h3>
+<h3>Levels and Roles</h3>
 <p>
-	This is where you create the user types that will be used by your application. Your specific application will probably have different account types, but if you are just testing Community Auth, and intend to use the example controllers, you should leave these account types as is for now.
+	This is where you create the user levels with associated role names that will be used by your application. Unless you have a basic e-commerce type website, your specific application will probably have different roles, but if you are just testing Community Auth, and intend to use the example controllers, you should leave the default levels and roles as-is for now.
 </p>
 <p>
-	If you are going to change the account types, <b>admin always needs to be called admin</b>, but you can create as many different user types as you want. Using some functions of the authentication library, priveledges are linear in nature, so keep that in mind as you create the levels. Also, if you want to create user levels that are numbered higher than 99, make sure to adjust the user_level field in the users table to accomodate the larger number.
+	If you are going to change the levels and roles, <b>admin always needs to be called admin</b>, but you can create as many different user levels and roles as you want. Using some functions of the authentication library, privileges are linear in nature, so keep that in mind as you create your levels and roles. Also, if you want to create user levels that are numbered higher than 99, make sure to adjust the user_level field in the users table to accomodate the larger number.
 </p>
-<h3>Account Groups</h3>
+<h3>Groups</h3>
 <p>
-	If you've got a bunch of user types, you may group them. This may mean less typing for you as you develop your application, because you can refer to multiple user types as a group.
+	If you've got a bunch of user roles, you may group them. This may mean less typing for you as you develop your application, because you can refer to multiple user roles as a group.
 </p>
 <h3>Maximum Allowed Login Attempts</h3>
 <p>

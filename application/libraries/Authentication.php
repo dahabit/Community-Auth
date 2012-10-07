@@ -22,12 +22,22 @@ class Authentication
 	public $CI;
 
 	/**
-	 * An array of user account types
+	 * An array of all user roles where key is 
+	 * level (int) and value is the role name (string)
 	 *
 	 * @var array
 	 * @access public
 	 */
-	public $account_types;
+	public $roles;
+
+	/**
+	 * An array of all user levels where key is 
+	 * role name (string) and value is level (int)
+	 *
+	 * @var array
+	 * @access public
+	 */
+	public $levels;
 
 	/**
 	 * The status of a login attempt
@@ -63,8 +73,13 @@ class Authentication
 	{
 		$this->CI =& get_instance();
 
-		$this->account_types = config_item('account_types');
+		// Make roles available by user_level (int) => role name (string)
+		$this->roles = config_item('levels_and_roles');
 
+		// Make levels available by role name (string) => user_level (int)
+		$this->levels = array_flip( $this->roles );
+
+		// Get the auth identifier from the session if it exists
 		$this->auth_identifier = $this->CI->session->userdata('auth_identifier');
 	}
 
@@ -187,7 +202,7 @@ class Authentication
 
 						// Check if the user is of high enough level to be here
 						OR ( is_int( $required_level ) && $auth_data->user_level < $required_level )
-						OR ( is_array( $required_level ) && ! in_array( $this->account_types[$auth_data->user_level], $required_level ) )
+						OR ( is_array( $required_level ) && ! in_array( $this->roles[$auth_data->user_level], $required_level ) )
 					)
 					{
 						// Login failed ...
@@ -198,7 +213,7 @@ class Authentication
 							"\n posted/hashed password          = " . $this->hash_passwd( $user_pass, $auth_data->user_salt ) . 
 							"\n required level                  = " . $required_level . 
 							"\n user level in database          = " . $auth_data->user_level . 
-							"\n user level in database (string) = " . $this->account_types[$auth_data->user_level]
+							"\n user level in database (string) = " . $this->roles[$auth_data->user_level]
 						);
 					}
 					else
@@ -360,7 +375,7 @@ class Authentication
 
 				// Check that the user is of high enough level to be here
 				OR ( is_int( $required_level ) && $auth_data->user_level < $required_level )
-				OR ( is_array( $required_level ) && ! in_array( $this->account_types[$auth_data->user_level], $required_level ) )
+				OR ( is_array( $required_level ) && ! in_array( $this->roles[$auth_data->user_level], $required_level ) )
 			)
 			{
 				// Logged in check failed ...
@@ -372,7 +387,7 @@ class Authentication
 					"\n user agent from database        = " . $auth_data->user_agent_string . 
 					"\n required level                  = " . $required_level . 
 					"\n user level in database          = " . $auth_data->user_level . 
-					"\n user level in database (string) = " . $this->account_types[$auth_data->user_level]
+					"\n user level in database (string) = " . $this->roles[$auth_data->user_level]
 				);
 			}
 			else

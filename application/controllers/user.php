@@ -295,7 +295,7 @@ class User extends MY_Controller {
 			$user_row = $this->user_model->view_user_record( $this->auth_user_id );
 
 			// Determine the role
-			$role = $this->authentication->account_types[$user_row->user_level];
+			$role = $this->authentication->roles[$user_row->user_level];
 
 			// Decrypt any sensitive data for display
 			if( isset( $user_row->license_number ) )

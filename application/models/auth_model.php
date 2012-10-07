@@ -64,7 +64,7 @@ class Auth_model extends MY_Model {
 			$row = $query->row_array();
 
 			// Get the role associated with the user level
-			$role = $this->authentication->account_types[$row['user_level']];
+			$role = $this->authentication->roles[$row['user_level']];
 
 			// Profile data query
 			$query = $this->db->select( $this->selected_profile_columns )
@@ -148,7 +148,7 @@ class Auth_model extends MY_Model {
 			$row = $query->row_array();
 
 			// Get the role associated with the user level
-			$role = $this->authentication->account_types[$row['user_level']];
+			$role = $this->authentication->roles[$row['user_level']];
 
 			// Profile data query
 			$query = $this->db->select( $this->selected_profile_columns )

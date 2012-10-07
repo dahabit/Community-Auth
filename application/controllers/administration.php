@@ -37,19 +37,13 @@ class Administration extends MY_Controller {
 			// Load resources
 			$this->load->library('csrf');
 
-			$view_data['account_types'] = $this->authentication->account_types;
+			$view_data['roles'] = $this->authentication->roles;
 
 			if( ! empty( $type ) )
 			{
-				// Convert $type to int
-				foreach( $this->authentication->account_types as $k => $v )
-				{
-					if( $type == $v )
-					{
-						$view_data['level'] = $k;
-						$view_data['type'] = $v;
-					}
-				}
+				// Get level associated with type (role)
+				$view_data['level'] = $this->authentication->levels[$type];
+				$view_data['type'] = $type;
 
 				// Confirm the type of user is permitted
 				if( $this->auth_level <= $view_data['level'] )
@@ -75,7 +69,7 @@ class Administration extends MY_Controller {
 			 */
 			else
 			{
-				foreach( $this->authentication->account_types as $k => $v )
+				foreach( $this->authentication->roles as $k => $v )
 				{
 					if( $k < $this->auth_level )
 					{
@@ -216,6 +210,9 @@ class Administration extends MY_Controller {
 		// Get the actual user data that matches the requested set of users
 		$view_data['users_data'] = $this->user_model->manage_user_records_data();
 
+		// Get roles for view
+		$view_data['roles'] = $this->authentication->roles;
+
 		// Insert the user data into table rows ( a nested view )
 		$view_data['table_content'] = $this->load->view('administration/manage_users_table_content', $view_data, TRUE );
 
@@ -335,7 +332,7 @@ class Administration extends MY_Controller {
 			/**
 			 * Get the role associated with the user level
 			 */
-			$role = $this->authentication->account_types[$users_level];
+			$role = $this->authentication->roles[$users_level];
 
 			/*
 			 * Check if form posted

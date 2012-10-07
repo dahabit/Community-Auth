@@ -26,9 +26,9 @@ $config['disable_installer'] = TRUE;
 
 /*
 | -----------------------------------------------------------------
-|							ACCOUNT TYPES							
+|						LEVELS AND ROLES							
 | -----------------------------------------------------------------
-| This definition sets the account types that will be used for authentication.
+| This definition sets the levels and roles that will be used for authentication.
 |
 | Admin should remain being called "admin", but the key may be changed. 
 | Keep in mind that if you change the number to higher than 9, then the 
@@ -38,7 +38,7 @@ $config['disable_installer'] = TRUE;
 |
 */
 
-$config['account_types'] = array(
+$config['levels_and_roles'] = array(
 	'1' => 'customer',
 	'6' => 'manager',
 	'9' => 'admin'
@@ -46,13 +46,13 @@ $config['account_types'] = array(
 
 /*
 | -----------------------------------------------------------------
-|							ACCOUNT GROUPS							
+|							GROUPS							
 | -----------------------------------------------------------------
-| This definition sets the account groups that will be used for authentication.
+| This definition sets the groups of roles that will be used for authentication.
 |
 */
 
-$config['account_groups'] = array(
+$config['groups'] = array(
 	'employees' => 'manager,admin'
 );
 

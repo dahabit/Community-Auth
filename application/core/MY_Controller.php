@@ -184,7 +184,7 @@ class MY_Controller extends CI_Controller
 	// --------------------------------------------------------------
 
 	/**
-	 * Require a login by user of a specific account group
+	 * Require a login by role in a specific group
 	 * or groups, specified by group name(s).
 	 * 
 	 * @param  string  a group name or names as a comma separated string.
@@ -192,7 +192,7 @@ class MY_Controller extends CI_Controller
 	protected function require_group( $group_names )
 	{
 		// Get all groups from config
-		$groups = config_item('account_groups');
+		$groups = config_item('groups');
 
 		// Get group(s) allowed to login
 		$group_array = explode( ',', $group_names );
@@ -331,7 +331,7 @@ class MY_Controller extends CI_Controller
 		$this->auth_first_name = $this->auth_data->first_name;
 		$this->auth_last_name  = $this->auth_data->last_name;
 		$this->auth_level      = $this->auth_data->user_level;
-		$this->auth_role       = $this->authentication->account_types[$this->auth_data->user_level];
+		$this->auth_role       = $this->authentication->roles[$this->auth_data->user_level];
 		$this->auth_email      = $this->auth_data->user_email;
 
 		// Set user specific variables to be available in all views

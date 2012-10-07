@@ -53,20 +53,8 @@ class Init extends MY_Controller {
 		$this->load->model('user_model');
 		$this->load->library('csrf');
 
-		// Get the admin user level number from the authentication config
-		$account_types = $this->authentication->account_types;
-
-		while( $role = current( $account_types ) )
-		{
-			if( $role == 'admin' )
-			{
-				$this->admin_user_level = key( $account_types );
-
-				break;
-			}
-
-			next( $account_types );
-		}
+		// Get the admin user level number
+		$this->admin_user_level = $this->authentication->levels['admin'];
 
 		// Use special template
 		$this->template = 'templates/installation_template';
