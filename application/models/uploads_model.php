@@ -31,7 +31,7 @@ class Uploads_model extends CI_Model {
 		return FALSE;
 	}
 
-	// --------------------------------------------------------------
+	// -----------------------------------------------------------------------
 
 	/**
 	 * Save images data
@@ -71,7 +71,25 @@ class Uploads_model extends CI_Model {
 		return FALSE;
 	}
 
-	// --------------------------------------------------------------
+	// -----------------------------------------------------------------------
+
+	/**
+	 * Delete image record
+	 */
+	public function delete_image_record( $user_id )
+	{
+		$this->db->where( 'user_id', $user_id )
+			->delete( config_item('custom_uploader_table') );
+
+		if( $this->db->affected_rows() == 1 )
+		{
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+	
+	// -----------------------------------------------------------------------
 }
 
 /* End of file uploads_model.php */

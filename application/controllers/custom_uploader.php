@@ -149,11 +149,20 @@ class Custom_uploader extends MY_Controller {
 
 					if( strpos( $image_data, $user_dir ) !== FALSE )
 					{
-						// Remove the scheme and domain from the src to find the uploaded file
-						$uploaded_file = FCPATH . str_replace( base_url(), '', $image_data );
+						// Remove scheme and domain from the src
+						$file_location = str_replace( base_url(), '', $image_data );
+
+						// Add path to base file location
+						$uploaded_file = FCPATH . $file_location;
 
 						// Delete the file from the file system
 						unlink( $uploaded_file );
+
+						// Remove the file from the base file location to get path to directory
+						$dir_location = FCPATH . pathinfo( $file_location, PATHINFO_DIRNAME );
+
+						// rmdir() will remove the directory if it is empty
+						@rmdir( $dir_location );
 
 						// Check the database for existing images data
 						$query_data = $this->uploads_model->get_custom_uploader_images( $this->auth_user_id );
@@ -161,32 +170,58 @@ class Custom_uploader extends MY_Controller {
 						// Unserialize the existing images data
 						$arr = unserialize( $query_data->images_data );
 
-						$temp = FALSE;
-
-						// For each image in the existing images data
-						foreach( $arr as $k => $v )
+						/**
+						 * If the deleted image was the only image, delete the record
+						 * and delete the directory that was holding the images. If 
+						 * there is more than one image, we just update the record.
+						 */
+						if( count( $arr ) > 1 )
 						{
-							// If this isn't the image that we are deleting now
-							if( $v != $image_data )
+							$temp = FALSE;
+
+							// For each image in the existing images data
+							foreach( $arr as $k => $v )
 							{
-								// Save it to a temp array
-								$temp[] = $v;
+								// If this isn't the image that we are deleting now
+								if( $v != $image_data )
+								{
+									// Save it to a temp array
+									$temp[] = $v;
+								}
+							}
+
+							// Send the new images data to the model for record update
+							if( $model_response = $this->uploads_model->save_image_data( $this->auth_user_id, serialize( $temp ) ) )
+							{
+								$response = array(
+									'status'        => 'Image Deleted',
+									'token'         => $this->csrf->token,
+									'ci_csrf_token' => $this->security->get_csrf_hash()
+								);
+							}
+							else
+							{
+								$response['status'] = 'Error: Model Response = FALSE on SAVE';
 							}
 						}
 
-						// Send the new images data to the model for record update
-						if( $model_response = $this->uploads_model->save_image_data( $this->auth_user_id, serialize( $temp ) ) )
-						{
-							$response = array(
-								'status'        => 'Image Deleted',
-								'token'         => $this->csrf->token,
-								'ci_csrf_token' => $this->security->get_csrf_hash()
-							);
-						}
+						// The deleted image was the only image
 						else
 						{
-							$response['status'] = 'Error: Model Response = FALSE';
+							if( $model_response = $this->uploads_model->delete_image_record( $this->auth_user_id ) )
+							{
+								$response = array(
+									'status'        => 'Image Deleted',
+									'token'         => $this->csrf->token,
+									'ci_csrf_token' => $this->security->get_csrf_hash()
+								);
+							}
+							else
+							{
+								$response['status'] = 'Error: Model Response = FALSE on DELETE';
+							}
 						}
+
 					}
 					else
 					{

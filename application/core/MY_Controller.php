@@ -324,7 +324,6 @@ class MY_Controller extends CI_Controller
 	 */
 	private function _set_user_variables()
 	{
-		$this->fb->log( $this->auth_data );
 		// Set user specific variables to be available in controllers
 		$this->auth_user_id    = $this->auth_data->user_id;
 		$this->auth_user_name  = $this->auth_data->user_name;
