@@ -2,7 +2,7 @@
 /**
  * Community Auth - User Controller
  *
- * Community Auth is an open source authentication application for CodeIgniter 2.1.2
+ * Community Auth is an open source authentication application for CodeIgniter 2.1.3
  *
  * @package     Community Auth
  * @author      Robert B Gottier

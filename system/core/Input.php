@@ -334,7 +334,7 @@ class CI_Input {
 
 					if ( ! $this->valid_ip($spoof))
 					{
-						$spoof = NULL;
+						$spoof = FALSE;
 					}
 					else
 					{
@@ -343,7 +343,7 @@ class CI_Input {
 				}
 			}
 
-			$this->ip_address = ($spoof !== NULL && in_array($_SERVER['REMOTE_ADDR'], $proxy_ips, TRUE))
+			$this->ip_address = ($spoof !== FALSE && in_array($_SERVER['REMOTE_ADDR'], $proxy_ips, TRUE))
 				? $spoof : $_SERVER['REMOTE_ADDR'];
 		}
 		else
@@ -641,8 +641,8 @@ class CI_Input {
 		$_SERVER['PHP_SELF'] = strip_tags($_SERVER['PHP_SELF']);
 
 
-		// CSRF Protection check
-		if ($this->_enable_csrf == TRUE)
+		// CSRF Protection check on HTTP requests
+		if ($this->_enable_csrf == TRUE && ! $this->is_cli_request())
 		{
 			$this->security->csrf_verify();
 		}
@@ -836,11 +836,11 @@ class CI_Input {
 	 *
 	 * Test to see if a request was made from the command line
 	 *
-	 * @return 	boolean
+	 * @return 	bool
 	 */
 	public function is_cli_request()
 	{
-		return (php_sapi_name() == 'cli') or defined('STDIN');
+		return (php_sapi_name() === 'cli' OR defined('STDIN'));
 	}
 
 }

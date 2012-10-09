@@ -2,7 +2,7 @@
 /**
  * Community Auth - PDF Creation Helper (uses DOMPDF)
  *
- * Community Auth is an open source authentication application for CodeIgniter 2.1.2
+ * Community Auth is an open source authentication application for CodeIgniter 2.1.3
  *
  * In order to use this helper, DOMPDF must be installed in the 
  * same directory, "application/helpers". DOMPDF is available
