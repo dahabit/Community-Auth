@@ -33,9 +33,10 @@
 			// Set up post vars
 			var post_data = {
 				'image_data': image_data,
-				'token': $('input[name="token"]').val(),
-				'ci_csrf_token_name': $('input[name="' + ci_csrf_token_name + '"]').val()
+				'token': $('input[name="token"]').val()
 			};
+
+			post_data[ci_csrf_token_name] = $('input[name="' + ci_csrf_token_name + '"]').val();
 
 			// Do Post
 			$.ajax({
@@ -68,9 +69,10 @@
 			// Set up post vars
 			var params = {
 				'src': $draggable.find("img").attr("src"),
-				'token': $('input[name="token"]').val(),
-				'ci_csrf_token_name': $('input[name="' + ci_csrf_token_name + '"]').val()
+				'token': $('input[name="token"]').val()
 			};
+
+			params[ci_csrf_token_name] = $('input[name="' + ci_csrf_token_name + '"]').val();
 
 			// Do POST
 			$.ajax({
@@ -147,13 +149,16 @@ $(document).ready(function(){
 			var ci_csrf_token_name = $('#ci_csrf_token_name').val();
 
 			// set dynamic data (post vars) with setData
-			this.setData({
+			var post_data = {
 				'dir_name':'custom_uploader',
 				'user_id': $('#user_id').val(),
 				'no_success_callback': 'true',
-				'token': $('input[name="token"]').val(),
-				'ci_csrf_token_name': $('input[name="' + ci_csrf_token_name + '"]').val()
-			});
+				'token': $('input[name="token"]').val()
+			};
+
+			post_data[ci_csrf_token_name] = $('input[name="' + ci_csrf_token_name + '"]').val();
+
+			this.setData(post_data);
 
 			// Allows only images set in config.
 			var allowed_types = $('#allowed_types').val();

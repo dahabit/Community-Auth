@@ -52,12 +52,15 @@
 			var regex = new RegExp('^(' + allowed_types + ')', 'i');
 			if (ext && ext.search(regex) != '-1') {
 				// set dynamic data (post vars) with setData
-				var post_vars = {};
-				post_vars['dir_name'] = 'profile_images';
-				post_vars['user_id'] = $('#user_id').val();
-				post_vars['token'] = $('input[name="token"]').val();
+				var post_vars = {
+					'dir_name': 'profile_images',
+					'user_id': $('#user_id').val(),
+					'token': $('input[name="token"]').val(),
+					'success_callback': '_profile_image'
+				};
+
 				post_vars[ci_csrf_token_name] = $('input[name="' + ci_csrf_token_name + '"]').val();
-				post_vars['success_callback'] = '_profile_image';
+
 				this.setData( post_vars );
 				// Show the uploader activity bar
 				$('#uploader-activity').show();
@@ -96,8 +99,7 @@
 		e.preventDefault();
 		// Get CI csrf token name
 		var ci_csrf_token_name = $('#ci_csrf_token_name').val();
-		var post_vars = {};
-		post_vars['token'] = $('input[name="token"]').val();
+		var post_vars = { 'token': $('input[name="token"]').val() };
 		post_vars[ci_csrf_token_name] = $('input[name="' + ci_csrf_token_name + '"]').val();
 		$.ajax({
 			type: 'post',
