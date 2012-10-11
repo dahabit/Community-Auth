@@ -40,7 +40,7 @@ h2{font-size:112%; font-weight:bold; color:#bf1e2e; margin:20px 0 9px;}
 h3{font-size:100%; font-weight:bold;color:#bf1e2e;}
 .content h3{margin-top:24px;color:#000;}
 .floating_template h1{margin:10px 0 10px 10px;width:580px;}
-.floating_template h2, .floating_template h3, .floating_template p, .floating_template .doc_code{margin-left:10px;width:765px;}
+.floating_template .content h2, .floating_template .content h3, .floating_template p, .floating_template .doc_code{margin-left:10px;width:765px;}
 ul.std-list, ol.std-list { margin:.5em 0 .5em 2em; }
 ul.std-list ul {margin:0 0 0 2em;}
 #user_info{float:right;width:420px;height:110px;}
