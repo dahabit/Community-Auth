@@ -86,8 +86,17 @@ $config['levels_and_roles'] = array(
 </p>
 <div class="doc_code">
 	<pre class="brush: php; toolbar: false;">
-$config['self_update_vendor'] = array_merge( $config['self_update_rules'], $config['vendor_update_rules'] );
-$config['update_user_vendor'] = array_merge( $config['update_user_rules'], $config['vendor_update_rules'] );</pre>
+// This is actually all on one line, but is too wide to display on this page
+$config['self_update_vendor'] = array_merge( 
+	$config['self_update_rules'], 
+	$config['vendor_update_rules'] 
+);
+
+// This is actually all on one line, but is too wide to display on this page
+$config['update_user_vendor'] = array_merge( 
+	$config['update_user_rules'], 
+	$config['vendor_update_rules'] 
+);</pre>
 </div>
 <p>
 	The good news is that when we get to the next section, "self update", the validation is already done.
@@ -104,7 +113,7 @@ $config['update_user_vendor'] = array_merge( $config['update_user_rules'], $conf
 	<pre class="brush: php; toolbar: false;">
 $config['authentication_profile_image'] = 'admin,manager,vendor,customer';
 
-// ...
+// ... space between configuration settings ...
 
 $config['authentication_custom_uploader'] = 'admin,manager,vendor,customer';</pre>
 </div>
@@ -115,7 +124,7 @@ $config['authentication_custom_uploader'] = 'admin,manager,vendor,customer';</pr
 <p>
 	We ended up modifying 4 files and creating 4 new ones:
 </p>
-<table>
+<table class="simple_table">
 	<thead>
 		<tr>
 			<th>Filename</th>
@@ -127,7 +136,7 @@ $config['authentication_custom_uploader'] = 'admin,manager,vendor,customer';</pr
 			<td>/application/config/db_tables.php</td>
 			<td>Existing</td>
 		</tr>
-		<tr>
+		<tr class="odd">
 			<td>/application/config/authentication.php</td>
 			<td>Existing</td>
 		</tr>
@@ -135,7 +144,7 @@ $config['authentication_custom_uploader'] = 'admin,manager,vendor,customer';</pr
 			<td>/application/views/administration/create_user/create_vendor.php</td>
 			<td>New</td>
 		</tr>
-		<tr>
+		<tr class="odd">
 			<td>/application/config/form_validation/administration/create_user/create_vendor.php</td>
 			<td>New</td>
 		</tr>
@@ -143,7 +152,7 @@ $config['authentication_custom_uploader'] = 'admin,manager,vendor,customer';</pr
 			<td>/application/views/administration/update_user/update_vendor.php</td>
 			<td>New</td>
 		</tr>
-		<tr>
+		<tr class="odd">
 			<td>/application/config/form_validation/user/user_update.php</td>
 			<td>Existing</td>
 		</tr>
@@ -151,7 +160,7 @@ $config['authentication_custom_uploader'] = 'admin,manager,vendor,customer';</pr
 			<td>/application/views/user/self_update/self_update_vendor.php</td>
 			<td>New</td>
 		</tr>
-		<tr>
+		<tr class="odd">
 			<td>/application/config/uploads_manager.php</td>
 			<td>Existing</td>
 		</tr>

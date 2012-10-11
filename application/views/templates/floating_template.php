@@ -58,7 +58,7 @@
 	if( ! empty( $tracking_code ) ) echo $tracking_code; 
 ?>
 </head>
-<body id="<?php echo $this->router->fetch_class() . '-' . $this->router->fetch_method(); ?>" class="<?php echo $this->router->fetch_class(); ?>-controller <?php echo $this->router->fetch_method(); ?>-method">
+<body id="<?php echo $this->router->fetch_class() . '-' . $this->router->fetch_method(); ?>" class="<?php echo $this->router->fetch_class(); ?>-controller <?php echo $this->router->fetch_method(); ?>-method floating_template">
 <div id="alert-bar">&nbsp;</div>
 <div class="wrapper">
 	<div id="indicator">
@@ -167,7 +167,9 @@
 				</ul>
 			</div>
 		</div>
-		<?php echo ( isset( $content ) ) ? $content : ''; ?>
+		<div class="content">
+			<?php echo ( isset( $content ) ) ? $content : ''; ?>
+		</div>
 		<div class="push">&nbsp;</div>
 	</div>
 </div>

@@ -35,7 +35,7 @@
 <h2 id="index">/index.php</h2>
 <h3>Default Timezone</h3>
 <p>
-	A PHP function named date_default_timezone_set() is located at the top of <b>/index.php</b>. Go to the <a href="http://php.net/manual/en/timezones.php" rel="external">List of Supported Timezones</a>, find the one where your server is located, then replace 'America/Los_Angeles' with it.
+	A PHP function named date_default_timezone_set() is located at the top of <b>/index.php</b>. Go to the <a href="http://php.net/manual/en/timezones.php" rel="external">list of supported timezones</a>, find the one where your server is located, then replace 'America/Los_Angeles' with it.
 </p>
 <h3>Maintenance Mode</h3>
 <p>
@@ -157,7 +157,7 @@
 	Before you can configure your database connection, you will need to create a mysql database. Community Auth's installer doesn't create the database, but only populates it with tables, so you'll need to use the command line, phpMyAdmin or another MySQL client to create the database before proceeding. Likewise, your actual database user needs to be created, because the Community Auth installer doesn't do this either.
 </p>
 <p>
-	Once you have your database and database user, please review the CodeIgniter documentation for <a href="http://codeigniter.com/user_guide/database/configuration.html">Database Configuration</a>, and configure your database connection for each ENVIRONMENT. Please note that at this time, the Community Auth installer only works with MySQL and MySQLi.
+	Once you have your database and database user, please review the CodeIgniter documentation for <a href="http://codeigniter.com/user_guide/database/configuration.html">database configuration</a>, and configure your database connection for each ENVIRONMENT. Please note that at this time, the Community Auth installer only works with MySQL and MySQLi.
 </p>
 <h2 id="db_tables">/application/config/db_tables.php</h2>
 <p>

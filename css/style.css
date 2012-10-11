@@ -26,6 +26,7 @@ body{font-family:Arial,Helvetica,sans-serif;}
 .content p{margin:10px 0 0 0;}
 .content b{color:#914609;}
 #two-right{float:right;width:295px;margin-right:24px;}
+.floating_template #two-right{margin-left:18px;margin-bottom:20px;}
 #indicator{float:left;width:100%;background-color:#999;margin:0;}
 #indicator div{padding:3px 10px 5px 0;text-align:right;}
 #indicator div, #indicator div a{text-decoration:none;font-weight:bold;color:#fff;}
@@ -38,6 +39,8 @@ h1{font-size:132%; font-weight:bold; border-bottom:3px solid #000; color:#bf1e2e
 h2{font-size:112%; font-weight:bold; color:#bf1e2e; margin:20px 0 9px;}
 h3{font-size:100%; font-weight:bold;color:#bf1e2e;}
 .content h3{margin-top:24px;color:#000;}
+.floating_template h1{margin:10px 0 10px 10px;width:580px;}
+.floating_template h2, .floating_template h3, .floating_template p, .floating_template .doc_code{margin-left:10px;width:765px;}
 ul.std-list, ol.std-list { margin:.5em 0 .5em 2em; }
 ul.std-list ul {margin:0 0 0 2em;}
 #user_info{float:right;width:420px;height:110px;}
@@ -153,6 +156,9 @@ table.simple_table tr{background-color:#fff;}
 table.simple_table tr.odd{background-color:transparent;}
 table.simple_table th.fixed_10_percent{width:10%;}
 #category_menu-index th{font-weight:bold}
+.floating_template table.simple_table{width:765px;margin:10px 0 10px 10px;border:1px solid #111;}
+.floating_template table.simple_table th{background-color:#bf1e2e;color:#fff;border-bottom:1px solid #111;font-weight:bold;}
+.floating_template table.simple_table tr.odd{background-color:transparent;}
 
 /* SCREENSHOTS */
 .screenshot-row{float:left;width:100%;margin-top:2em;}
