@@ -166,6 +166,39 @@ class Documentation extends MY_Controller {
 	}
 
 	// --------------------------------------------------------------
+
+	/**
+	 * Instruction on adding a role to a stock installation of Community Auth
+	 */
+	public function add_a_role()
+	{
+		$data = array(
+			'title' => 'Community Auth - Adding a Role',
+			'style_sheets' => array(
+				'css/shCoreRDark.css' => 'screen',
+				'css/shThemeRDark.css' => 'screen'
+			),
+			'javascripts' => array(
+				'js/shCore.js',
+				'js/shBrushPhp.js'
+			),
+			'dynamic_extras' => '
+				SyntaxHighlighter.all();
+
+				$("a[rel*=external]").click( function(){
+					window.open(this.href);
+					return false;
+				});
+			',
+			'content' => $this->load->view( 'documentation/add_a_role', '', TRUE )
+		);
+
+		$this->template = 'templates/floating_template';
+
+		$this->load->view( $this->template, $data );
+	}
+
+	// --------------------------------------------------------------
 }
 
 /* End of file documentation.php */
