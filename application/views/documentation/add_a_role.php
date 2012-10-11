@@ -12,16 +12,16 @@
  */
 ?>
 
-<h1>Adding a New Role</h1>
+<h1>Tutorial: Adding a New Role</h1>
 <p>
-	Adding to or subtracting a role from Community Auth requires creating and editing some files, and the goal of this tutorial will be to show you how to do it quickly. I am going to walk you through the process of adding a "vendor" role to a untouched installation of Community Auth. Installation is not covered in this tutorial, and I'm going to assume you have it Community Auth up and running, and that everything is working as it should.
+	Adding a role to Community Auth requires creating and editing some files, and the goal of this tutorial will be to show you how to do it quickly. I am going to walk you through the process of adding a "vendor" role to an untouched installation of Community Auth. Installation itself is not covered in this tutorial, and I'm going to assume you have Community Auth up and running, and that application is working.
 </p>
-<h2>Add Vendor Profile Table to Database</h2>
+<h2>Add a Vendor Profile Table to the Database</h2>
 <p>
-	A vendor is a wholesaler or distributor of merchandise. As we create our vendor profile, we will give the vendor a couple of fields that are unique to their profile, "business_name" and "business_type". In the example application all profile tables include a profile image, and Community Auth requires that "first_name" and "last_name" fields exist. I'm going to keep it simple during this tutorial, so I'm not going to add any other fields.
+	A vendor is a wholesaler or distributor of merchandise. As we create our vendor profile, we will give the vendor a couple of fields that are unique to their role, "business_name" and "business_type". In the example application all profile tables include a profile image, and Community Auth requires that "first_name" and "last_name" fields exist. I'm going to keep this tutorial very simple, so the two unique fields will work nicely.
 </p>
 <p>
-	Take a look at the SQL below. You can run it on your database or create it manually. I'm using MySQL and no support is given for other database types.
+	Take a look at the SQL below. You can run it on your database to create the vendor profile table, or create the table manually.
 </p>
 <div class="doc_code">
 	<pre class="brush: php; toolbar: false;">
@@ -35,20 +35,20 @@ CREATE TABLE IF NOT EXISTS `vendor_profiles` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;</pre>
 </div>
-<h2>Add Vendor Profile Table to DB Tables Config</h2>
+<h2>Add the Vendor Profile Table to DB Tables Config</h2>
 <p>
-	Open up /application/config/db_tables.php and add the following line:
+	Open up <b>/application/config/db_tables.php</b> and add the following line:
 </p>
 <div class="doc_code">
-	<pre class="brush: php; toolbar: false;">
+	<pre class="brush: php; toolbar: false; first-line:19;">
 $config['vendor_profiles_table'] = 'vendor_profiles';</pre>
 </div>
-<h2>Add New Level &amp; Role to Authentication Config</h2>
+<h2>Add a New Level &amp; Role to Authentication Config</h2>
 <p>
-	Open /application/config/authentication.php. The second configuration setting is Levels and Roles. Add a new element to the array for our vendor. Use '2' as the key and 'vendor' as the value.
+	Open <b>/application/config/authentication.php</b>. The second configuration setting is Levels and Roles. Add a new element to the array for our vendor. Use '2' as the key and 'vendor' as the value.
 </p>
 <div class="doc_code">
-	<pre class="brush: php; toolbar: false;">
+	<pre class="brush: php; toolbar: false; first-line:41;">
 $config['levels_and_roles'] = array(
 	'1' => 'customer',
 	'2' => 'vendor',
@@ -58,41 +58,205 @@ $config['levels_and_roles'] = array(
 </div>
 <h2>User Creation</h2>
 <p>
-	We need to be able to create new vendors. In the example application, user creation is limited to employees, and both manager and admin have a level higher than the vendor's level, so both will be able to create the new vendor once we do some work. 
+	We need to be able to create new vendors, and that requires the creation of a new view and new form validation file. 
 </p>
 <h3>Creation Form</h3>
 <p>
-	The form that is filled out during user creation is a nested view, and all roles (except admin) need one. The views are located at /application/views/administration/create_user/. The filename of the views are "create_" + the user role + ".php". I took the customer's file and saved it as create_vendor.php. The vendor profile doesn't have the address, city, state, and zip fields that the customer profile has, so I'm going to delete those fields and replace them with the business name and business type fields.
+	The form that is filled out during user creation is a nested view, and all roles (except admin which are created through the Community Auth installer) need one. The views are located at <b>/application/views/administration/create_user/</b>. The filename of the views are built with "create_" + the user role + ".php". Using the customer's create_customer.php so I didn't have to start from scratch, do a "save as" <b>create_vendor.php</b>. The vendor profile doesn't have the address, city, state, and zip fields that the customer profile has, so I'm going to delete those fields and replace them with the vendor's business_name and business_type fields.
 </p>
+<div class="doc_code">
+	<pre class="brush: php; toolbar: false; first-line:123;">
+&lt;div class="form-row">
+
+	&lt;?php
+		// BUSINESS NAME LABEL AND INPUT *************
+		echo form_label(
+			'Business Name',
+			'business_name',
+			array('class'=>'form_label')
+		);
+
+		echo input_requirement('*');
+
+		$input_data = array(
+			'name'		=> 'business_name',
+			'id'		=> 'business_name',
+			'class'		=> 'form_input max_chars',
+			'value'		=> set_value('business_name'),
+			'maxlength'	=> '30',
+		);
+
+		echo form_input($input_data);
+
+	?>
+
+&lt;/div>
+&lt;div class="form-row">
+
+	&lt;?php
+		// BUSINESS TYPE LABEL AND INPUT *************
+		echo form_label(
+			'Business Type',
+			'business_type',
+			array('class'=>'form_label')
+		);
+
+		echo input_requirement('*');
+
+		$input_data = array(
+			'name'		=> 'business_type',
+			'id'		=> 'business_type',
+			'class'		=> 'form_input max_chars',
+			'value'		=> set_value('business_type'),
+			'maxlength'	=> '30',
+		);
+
+		echo form_input($input_data);
+
+	?>
+
+&lt;/div></pre>
+</div>
 <h3>Validation Rules for Creation</h3>
 <p>
-	Character limiters are provided for client side validation, and are set up as classes for the form elements. For the vendor's business name and business type fields I used "max_chars". Server side validation is where we truly validate the input from the form, so open up /application/config/form_validation/administration/create_user/create_customer.php, and save it as create_vendor.php. The filename of the user creation validation files are "create_" + the user role + ".php", which is the same name as the view.
+	Character limiters are provided for client side validation, and are set up as classes for the form elements. For the vendor's business name and business type fields I a used "max_chars" class. Server side validation is where we truly validate the input from the form, and to save time, we're going to borrow code from the customer's validation file.Open up <b>/application/config/form_validation/administration/create_user/create_customer.php</b>, and save it as <b>create_vendor.php</b>. The filename of the user creation validation files are built with "create_" + the user role + ".php", which is the same name as the view.
 </p>
 <p>
-	Make sure the configuration setting in create_vendor.php is named "vendor_creation_rules". Delete the rules for address, city, state, and zip. Add rules for the business name and business type.
+	Make sure the configuration setting in create_vendor.php is named <b>"vendor_creation_rules"</b>.
 </p>
+<div class="doc_code">
+	<pre class="brush: php; toolbar: false; first-line:14;">
+$config['vendor_creation_rules'] = array(</pre>
+</div>
+<p>
+	Delete the rules for address, city, state, and zip. Add rules for the business name and business type.
+</p>
+<div class="doc_code">
+	<pre class="brush: php; toolbar: false; first-line:40;">
+array(
+	'field' => 'business_name',
+	'label' => 'BUSINESS NAME',
+	'rules' => 'trim|required|xss_clean|max_length[30]'
+),
+array(
+	'field' => 'business_type',
+	'label' => 'BUSINESS TYPE',
+	'rules' => 'trim|required|xss_clean|max_length[30]'
+)</pre>
+</div>
 <p>
 	You should now be able to create a vendor.
 </p>
 <h2>User Update</h2>
 <p>
-	We need to be able to update the vendor. Forunately, most of the work we did to be able to create a vendor is nearly identical to what we will need to do to be able to update the vendor.
+	We need to be able to update the vendor. Forunately, the work we did to be able to create a vendor is very much like what we will need to do to be able to update the vendor.
 </p>
 <p>
-	Open /application/views/administration/update_user/update_customer.php and save as update_vendor.php. Make the changes to form fields that are specific to the vendor. (Remove address, city, state, and zip, then add business name and business type)
-</p>
-<p>
-	Setting up the form validation for the vendor update is a little tricky, because all profiles currently share the same config file, located at /application/config/form_validation/user/user_update.php In this file you will see where customer, manager and admin have their own validation rules. I'm going to copy the customer's update rules and modify them for the vendor. Remember the vendor doesn't have an address, city, state, or zip, but does have the business name and business type. Make sure when you copy the rules that the name of the configuration setting is "vendor_update_rules". Go down to the bottom of the file and put in the following code where you see the other lines just like them:
+	Open <b>/application/views/administration/update_user/update_customer.php</b> and save as <b>update_vendor.php.</b> Make the changes to form fields that are specific to the vendor. (Remove address, city, state, and zip, then add business name and business type)
 </p>
 <div class="doc_code">
-	<pre class="brush: php; toolbar: false;">
-// This is actually all on one line, but is too wide to display on this page
+	<pre class="brush: php; toolbar: false; first-line:130;">
+&lt;div class="form-row">
+
+	&lt;?php
+		// BUSINESS NAME LABEL AND INPUT *************
+		echo form_label(
+			'Business Name',
+			'business_name',
+			array('class'=>'form_label')
+		);
+
+		echo input_requirement('*');
+
+		$input_data = array(
+			'name'		=> 'business_name',
+			'id'		=> 'business_name',
+			'class'		=> 'form_input max_chars',
+			'value'		=> set_value(
+				'business_name', 
+				$user_data->business_name
+			),
+			'maxlength'	=> '30',
+		);
+		echo form_input($input_data);
+
+	?>
+
+&lt;/div>
+&lt;div class="form-row">
+
+	&lt;?php
+		// BUSINESS TYPE LABEL AND INPUT *************
+		echo form_label(
+			'Business Type',
+			'business_type',
+			array('class'=>'form_label')
+		);
+
+		echo input_requirement('*');
+
+		$input_data = array(
+			'name'		=> 'business_type',
+			'id'		=> 'business_type',
+			'class'		=> 'form_input max_chars',
+			'value'		=> set_value(
+				'business_type', 
+				$user_data->business_type
+			),
+			'maxlength'	=> '30',
+		);
+		echo form_input($input_data);
+
+	?>
+
+&lt;/div></pre>
+</div>
+<p>
+	Setting up the form validation for the vendor update is a little tricky, because all profiles currently share the same form validation config file, located at <b>/application/config/form_validation/user/user_update.php</b> In this file you will see where customer, manager and admin have their own validation rules. I'm going to copy the customer's update rules and modify them for the vendor. Remember the vendor doesn't have an address, city, state, or zip, but does have the business_name and business_type. Make sure when you copy the rules that you rename the configuration setting to <b>"vendor_update_rules"</b>. Go down to the bottom of the file and add the lines that merge the self update rules and update user rules with the vendor update rules
+</p>
+<div class="doc_code">
+	<pre class="brush: php; toolbar: false; first-line:59;">
+// VENDOR SPECIFIC UPDATE RULES --------------------------
+$config['vendor_update_rules'] = array(
+	array(
+		'field' => 'user_pass',
+		'label' => 'PASSWORD',
+		'rules' => 'trim|matches[user_pass_confirm]|external_callbacks[model,formval_callbacks,_check_password_strength,FALSE]'
+	),
+	array(
+		'field' => 'user_pass_confirm',
+		'label' => 'CONFIRMED PASSWORD',
+		'rules' => 'trim'
+	),
+	array(
+		'field' => 'last_name',
+		'label' => 'LAST NAME',
+		'rules' => 'trim|required|xss_clean'
+	),
+	array(
+		'field' => 'first_name',
+		'label' => 'FIRST NAME',
+		'rules' => 'trim|required|xss_clean'
+	),
+	array(
+		'field' => 'business_name',
+		'label' => 'BUSINESS NAME',
+		'rules' => 'trim|required|xss_clean|max_length[30]'
+	),
+	array(
+		'field' => 'business_type',
+		'label' => 'BUSINESS TYPE',
+		'rules' => 'trim|required|xss_clean|max_length[30]'
+	)
+);
+
+// Code below goes near the end of the file
+
 $config['self_update_vendor'] = array_merge( 
 	$config['self_update_rules'], 
 	$config['vendor_update_rules'] 
 );
 
-// This is actually all on one line, but is too wide to display on this page
 $config['update_user_vendor'] = array_merge( 
 	$config['update_user_rules'], 
 	$config['vendor_update_rules'] 
@@ -103,14 +267,73 @@ $config['update_user_vendor'] = array_merge(
 </p>
 <h2>Self Update</h2>
 <p>
-	There's nothing about making the self update form that you haven't done already. Open up /application/views/user/self_update/self_update_customer.php and rename it to self_update_vendor.php. Find the address, city, state, and zip fields and delete them. Add in fields for the business name and business type.
-</p>
-<h3>Profile Image Upload Configuration</h3>
-<p>
-	The profile image upload on the "My Profile" page and the Custom Uploader use ajax to upload the image, and authentication is performed on those requests. Unless you remove the image upload functionality for the vendor, you'll need to open /application/config/uploads_manager.php and add vendor to the "authentication_profile_image" and "authentication_custom_uploader" configuration settings.
+	There's nothing about making the self update form that you haven't done already. Open up <b>/application/views/user/self_update/self_update_customer.php</b> and save it as <b>self_update_vendor.php</b>. Find the address, city, state, and zip fields and delete them. Add in fields for the business_name and business_type.
 </p>
 <div class="doc_code">
-	<pre class="brush: php; toolbar: false;">
+	<pre class="brush: php; toolbar: false; first-line:66;">
+&lt;div class="form-row">
+
+	&lt;?php
+		// BUSINESS NAME LABEL AND INPUT *************
+		echo form_label(
+			'Business Name',
+			'business_name',
+			array('class'=>'form_label')
+		);
+
+		echo input_requirement('*');
+
+		$input_data = array(
+			'name'		=> 'business_name',
+			'id'		=> 'business_name',
+			'class'		=> 'form_input max_chars',
+			'value'		=> set_value(
+				'business_name', 
+				$user_data->business_name
+			),
+			'maxlength'	=> '60',
+		);
+
+		echo form_input($input_data);
+
+	?>
+
+&lt;/div>
+&lt;div class="form-row">
+
+	&lt;?php
+		// BUSINESS TYPE LABEL AND INPUT *************
+		echo form_label(
+			'Business Type',
+			'business_type',
+			array('class'=>'form_label')
+		);
+
+		echo input_requirement('*');
+
+		$input_data = array(
+			'name'		=> 'business_type',
+			'id'		=> 'business_type',
+			'class'		=> 'form_input max_chars',
+			'value'		=> set_value(
+				'business_type', 
+				$user_data->business_type
+			),
+			'maxlength'	=> '60',
+		);
+
+		echo form_input($input_data);
+
+	?>
+
+&lt;/div></pre>
+</div>
+<h3>Profile Image Upload Configuration</h3>
+<p>
+	The profile image upload on the "My Profile" page and the Custom Uploader use ajax to upload the image, and authentication is performed on those requests. Unless you remove the image upload functionality for the vendor, you'll need to open <b>/application/config/uploads_manager.php</b> and add vendor to the <b>"authentication_profile_image"</b> and <b>"authentication_custom_uploader"</b> configuration settings.
+</p>
+<div class="doc_code">
+	<pre class="brush: php; toolbar: false; first-line:40;">
 $config['authentication_profile_image'] = 'admin,manager,vendor,customer';
 
 // ... space between configuration settings ...
